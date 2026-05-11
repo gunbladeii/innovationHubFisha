@@ -1,0 +1,116 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-plus-jakarta: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-space-grotesk: 'Space Grotesk', system-ui, sans-serif;
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: var(--font-plus-jakarta);
+    background-color: #F8FAFF;
+    color: #0F172A;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-space-grotesk);
+  }
+}
+
+@layer components {
+  .card-hover {
+    @apply transition-all duration-300;
+  }
+  .card-hover:hover {
+    @apply -translate-y-1 shadow-lg;
+  }
+
+  .tag-pill {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border transition-colors duration-150;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center gap-2 px-4 py-2 bg-brand-600 text-white text-sm font-semibold rounded-lg transition-colors duration-150 shadow-sm;
+  }
+  .btn-primary:hover {
+    @apply bg-brand-700;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center gap-2 px-4 py-2 bg-white text-gray-700 text-sm font-medium rounded-lg border border-gray-200 transition-colors duration-150;
+  }
+  .btn-secondary:hover {
+    @apply bg-gray-50;
+  }
+
+  .section-title {
+    @apply text-3xl md:text-4xl font-bold text-gray-900;
+    font-family: var(--font-space-grotesk);
+  }
+
+  .filter-chip {
+    @apply px-3 py-1.5 text-sm font-medium rounded-full border cursor-pointer transition-all duration-150;
+  }
+
+  .filter-chip-active {
+    @apply bg-brand-600 text-white border-brand-600 shadow-sm;
+  }
+
+  .filter-chip-inactive {
+    @apply bg-white text-gray-600 border-gray-200;
+  }
+  .filter-chip-inactive:hover {
+    border-color: #93C5FD;
+    color: #2563EB;
+  }
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #F1F5F9;
+}
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+
+/* Card shimmer effect on hover */
+.innovation-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, transparent 40%, rgba(59, 130, 246, 0.15) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.innovation-card:hover::before {
+  opacity: 1;
+}
