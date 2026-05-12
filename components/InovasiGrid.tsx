@@ -1,18 +1,28 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import InovasiCard from "./InovasiCard";
 import InovasiModal from "./InovasiModal";
 import FilterBar from "./FilterBar";
 import { INOVASI_SEED, type InovasiSeedItem } from "@/lib/data";
 
+const STORAGE_KEY = "fisha_inovasi_data";
+
 export default function InovasiGrid() {
   const [activeTag, setActiveTag] = useState("Semua");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedItem, setSelectedItem] = useState<InovasiSeedItem | null>(null);
+  const [data, setData] = useState<InovasiSeedItem[]>(INOVASI_SEED);
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) setData(JSON.parse(stored) as InovasiSeedItem[]);
+    } catch {}
+  }, []);
 
   const filtered = useMemo(() => {
-    return INOVASI_SEED.filter((item) => {
+    return data.filter((item) => {
       const matchTag = activeTag === "Semua" || item.tags.includes(activeTag);
       const matchSearch =
         searchQuery === "" ||
@@ -23,13 +33,13 @@ export default function InovasiGrid() {
         );
       return matchTag && matchSearch;
     });
-  }, [activeTag, searchQuery]);
+  }, [activeTag, searchQuery, data]);
 
   return (
     <section className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
       <div className="mb-8">
         <h2 className="section-title mb-2">Senarai Inovasi</h2>
-        <p className="text-gray-500 text-base">
+        <p className="text-slate-500 text-base">
           Tapis mengikut kategori atau cari sistem yang anda perlukan.
         </p>
       </div>
@@ -41,7 +51,7 @@ export default function InovasiGrid() {
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
           count={filtered.length}
-          total={INOVASI_SEED.length}
+          total={data.length}
         />
       </div>
 

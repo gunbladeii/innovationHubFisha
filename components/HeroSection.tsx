@@ -17,41 +17,35 @@ export default function HeroSection() {
   return (
     <section
       className="relative overflow-hidden"
-      style={{ background: "#0B0B0F" }}
+      style={{ background: "linear-gradient(160deg, #EFF6FF 0%, #DBEAFE 40%, #EEF2FF 100%)" }}
     >
-      {/* Ambient glows */}
-      <div
-        className="absolute top-0 left-[-10%] w-[500px] h-[500px] rounded-full pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(59,130,246,0.12) 0%, transparent 70%)",
-        }}
-      />
-      <div
-        className="absolute bottom-0 right-[-5%] w-[400px] h-[400px] rounded-full pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(139,92,246,0.08) 0%, transparent 70%)",
-        }}
-      />
-
       {/* Dot grid overlay */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          backgroundImage:
-            "radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px)",
+          backgroundImage: "radial-gradient(rgba(59,130,246,0.18) 1px, transparent 1px)",
           backgroundSize: "28px 28px",
         }}
+      />
+
+      {/* Ambient glows */}
+      <div
+        className="absolute top-0 left-[-10%] w-[500px] h-[500px] rounded-full pointer-events-none"
+        style={{ background: "radial-gradient(circle, rgba(59,130,246,0.10) 0%, transparent 70%)" }}
+      />
+      <div
+        className="absolute bottom-0 right-[-5%] w-[400px] h-[400px] rounded-full pointer-events-none"
+        style={{ background: "radial-gradient(circle, rgba(99,102,241,0.08) 0%, transparent 70%)" }}
       />
 
       {/* Main content */}
       <div className="relative max-w-6xl mx-auto px-4 sm:px-6 pt-20 pb-10 md:pt-28 md:pb-12">
         {/* Badge pill */}
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border mb-8" style={{ borderColor: "rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.04)" }}>
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border mb-8"
+          style={{ borderColor: "rgba(59,130,246,0.25)", background: "rgba(59,130,246,0.07)" }}>
           <span className="w-1.5 h-1.5 rounded-full bg-brand-500 flex-shrink-0" />
-          <span className="text-xs text-gray-400 font-medium tracking-wide">
-            Jemaah Nazir · Kementerian Pendidikan Malaysia
+          <span className="text-xs text-brand-700 font-medium tracking-wide">
+            Fisha · Innovation Hub
           </span>
         </div>
 
@@ -60,18 +54,15 @@ export default function HeroSection() {
           className="font-bold leading-none mb-6"
           style={{ fontFamily: "var(--font-space-grotesk)" }}
         >
-          <span className="block text-5xl md:text-7xl text-white">
+          <span className="block text-5xl md:text-7xl text-gray-900">
             Inovasi Digital
           </span>
-          <span
-            className="block text-5xl md:text-7xl"
-            style={{ color: "#3B82F6" }}
-          >
-            Jemaah Nazir
+          <span className="block text-5xl md:text-7xl" style={{ color: "#1D4ED8" }}>
+            FISHA
           </span>
         </h1>
 
-        <p className="text-gray-400 text-base md:text-lg max-w-xl leading-relaxed mb-10">
+        <p className="text-gray-500 text-base md:text-lg max-w-xl leading-relaxed mb-10">
           Koleksi inovasi digital yang dibangunkan untuk transformasi sistem
           pemeriksaan dan pengurusan pendidikan Malaysia.
         </p>
@@ -83,17 +74,16 @@ export default function HeroSection() {
               key={s.label}
               className="rounded-2xl p-4 flex flex-col gap-1"
               style={{
-                background: "rgba(255,255,255,0.04)",
-                border: "1px solid rgba(255,255,255,0.08)",
+                background: "#FFFFFF",
+                border: "1px solid rgba(59,130,246,0.18)",
+                boxShadow: "0 2px 12px rgba(59,130,246,0.08)",
               }}
             >
-              <span className="text-2xl font-bold text-white" style={{ fontFamily: "var(--font-space-grotesk)" }}>
+              <span className="text-2xl font-bold text-brand-700" style={{ fontFamily: "var(--font-space-grotesk)" }}>
                 {s.value}
               </span>
-              <span className="text-xs text-gray-300 font-medium leading-tight">
-                {s.label}
-              </span>
-              <span className="text-xs text-gray-600">{s.sub}</span>
+              <span className="text-xs text-gray-700 font-medium leading-tight">{s.label}</span>
+              <span className="text-xs text-gray-400">{s.sub}</span>
             </div>
           ))}
         </div>
@@ -103,9 +93,9 @@ export default function HeroSection() {
       <div
         className="relative overflow-hidden py-4"
         style={{
-          borderTop: "1px solid rgba(255,255,255,0.06)",
-          borderBottom: "1px solid rgba(255,255,255,0.06)",
-          background: "rgba(255,255,255,0.02)",
+          borderTop: "1px solid rgba(59,130,246,0.15)",
+          borderBottom: "1px solid rgba(59,130,246,0.15)",
+          background: "rgba(59,130,246,0.04)",
         }}
       >
         <div className="flex w-max animate-marquee">
@@ -113,10 +103,10 @@ export default function HeroSection() {
             <span
               key={i}
               className="flex items-center gap-4 px-4 text-sm font-medium whitespace-nowrap"
-              style={{ color: "#6B6B80" }}
+              style={{ color: "#64748B" }}
             >
               {item}
-              <span className="w-1 h-1 rounded-full flex-shrink-0" style={{ background: "#2A2A35" }} />
+              <span className="w-1 h-1 rounded-full flex-shrink-0" style={{ background: "#93C5FD" }} />
             </span>
           ))}
         </div>

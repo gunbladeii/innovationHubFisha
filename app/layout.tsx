@@ -5,8 +5,8 @@ export const metadata: Metadata = {
   title: "FISHA Innovation Hub | Portal Inovasi Digital Jemaah Nazir",
   description:
     "Showcase inovasi digital yang dibangunkan oleh Jemaah Nazir — sistem-sistem moden untuk transformasi pendidikan Malaysia.",
-  keywords: ["Jemaah Nazir", "inovasi digital", "sistem pendidikan", "FISHA", "MOE Malaysia"],
-  authors: [{ name: "Jemaah Nazir" }],
+  keywords: ["Fisha", "inovasi digital", "sistem pendidikan", "FISHA", "MOE Malaysia"],
+  authors: [{ name: "Fisha" }],
   openGraph: {
     title: "FISHA Innovation Hub",
     description: "Portal Inovasi Digital Jemaah Nazir",
@@ -30,7 +30,9 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        {children}
+      </body>
     </html>
   );
 }

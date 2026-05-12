@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 
 const ADMIN_PASSWORD = "FISHA2026-UD";
+const STORAGE_KEY = "fisha_inovasi_data";
 
 type InovasiItem = (typeof INOVASI_SEED)[number] & { id?: string };
 
@@ -150,12 +151,24 @@ function PasswordGate({ onUnlock }: { onUnlock: () => void }) {
 /* â”€â”€â”€ Main Page â”€â”€â”€ */
 export default function AdminPage() {
   const [locked, setLocked] = useState(true);
-  const [items, setItems] = useState<InovasiItem[]>(INOVASI_SEED as InovasiItem[]);
+  const [items, setItems] = useState<InovasiItem[]>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) return JSON.parse(stored) as InovasiItem[];
+      } catch {}
+    }
+    return INOVASI_SEED as InovasiItem[];
+  });
   const [editing, setEditing] = useState<InovasiItem | null>(null);
   const [isNew, setIsNew] = useState(false);
   const [saved, setSaved] = useState(false);
 
   if (locked) return <PasswordGate onUnlock={() => setLocked(false)} />;
+
+  const persist = (newItems: InovasiItem[]) => {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(newItems)); } catch {}
+  };
 
   const openEdit = (item: InovasiItem) => { setEditing({ ...item }); setIsNew(false); };
   const openNew = () => { setEditing({ ...defaultItem }); setIsNew(true); };
@@ -163,11 +176,14 @@ export default function AdminPage() {
 
   const saveEdit = () => {
     if (!editing) return;
+    let newItems: InovasiItem[];
     if (isNew) {
-      setItems((prev) => [...prev, { ...editing, id: Date.now().toString() }]);
+      newItems = [...items, { ...editing, id: Date.now().toString() }];
     } else {
-      setItems((prev) => prev.map((i) => (i.slug === editing.slug ? editing : i)));
+      newItems = items.map((i) => (i.slug === editing.slug ? editing : i));
     }
+    setItems(newItems);
+    persist(newItems);
     setSaved(true);
     setTimeout(() => setSaved(false), 2500);
     closeEdit();
@@ -175,13 +191,15 @@ export default function AdminPage() {
 
   const deleteItem = (slug: string) => {
     if (!confirm("Padam inovasi ini?")) return;
-    setItems((prev) => prev.filter((i) => i.slug !== slug));
+    const newItems = items.filter((i) => i.slug !== slug);
+    setItems(newItems);
+    persist(newItems);
   };
 
   const togglePublish = (slug: string) => {
-    setItems((prev) =>
-      prev.map((i) => (i.slug === slug ? { ...i, is_published: !i.is_published } : i))
-    );
+    const newItems = items.map((i) => (i.slug === slug ? { ...i, is_published: !i.is_published } : i));
+    setItems(newItems);
+    persist(newItems);
   };
 
   if (editing) {

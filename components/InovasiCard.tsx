@@ -17,8 +17,8 @@ export default function InovasiCard({ item, index, onReadMore }: InovasiCardProp
     <article
       className="innovation-card relative rounded-2xl border card-hover overflow-hidden flex flex-col cursor-pointer"
       style={{
-        background: "#111116",
-        borderColor: "rgba(255,255,255,0.08)",
+        background: "#FFFFFF",
+        borderColor: "rgba(59,130,246,0.15)",
         animationDelay: `${index * 60}ms`,
       }}
       onClick={onReadMore}
@@ -93,8 +93,8 @@ export default function InovasiCard({ item, index, onReadMore }: InovasiCardProp
               {item.ikon}
             </div>
             <div>
-              <h3 className="font-bold text-white text-base leading-tight">{item.nama}</h3>
-              <span className="text-xs text-gray-600 font-medium">{item.tahun}</span>
+              <h3 className="font-bold text-gray-900 text-base leading-tight">{item.nama}</h3>
+              <span className="text-xs text-gray-400 font-medium">{item.tahun}</span>
             </div>
           </div>
           <span className={`tag-pill border flex items-center gap-1.5 flex-shrink-0 ${statusCfg.color}`}>
@@ -104,7 +104,7 @@ export default function InovasiCard({ item, index, onReadMore }: InovasiCardProp
         </div>
 
         {/* Description */}
-        <p className="text-sm text-gray-500 leading-relaxed line-clamp-2 flex-1">
+        <p className="text-sm text-gray-500 leading-relaxed line-clamp-2 flex-1 text-slate-600">
           {item.deskripsi}
         </p>
 
@@ -127,9 +127,9 @@ export default function InovasiCard({ item, index, onReadMore }: InovasiCardProp
             <span
               className="tag-pill"
               style={{
-                background: "rgba(255,255,255,0.04)",
-                color: "#6B6B80",
-                borderColor: "rgba(255,255,255,0.08)",
+                background: "#F1F5F9",
+                color: "#64748B",
+                borderColor: "#E2E8F0",
               }}
             >
               +{item.tags.length - 4}
@@ -141,7 +141,7 @@ export default function InovasiCard({ item, index, onReadMore }: InovasiCardProp
         {(item.link_demo || item.link_github) && (
           <div
             className="flex items-center justify-end pt-2 gap-1.5"
-            style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
+            style={{ borderTop: "1px solid rgba(59,130,246,0.1)" }}
           >
             {item.link_demo && (
               <a
