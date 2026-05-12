@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { INOVASI_SEED, STATUS_CONFIG } from "@/lib/data";
 import {
   Plus,
@@ -151,18 +151,19 @@ function PasswordGate({ onUnlock }: { onUnlock: () => void }) {
 /* â”€â”€â”€ Main Page â”€â”€â”€ */
 export default function AdminPage() {
   const [locked, setLocked] = useState(true);
-  const [items, setItems] = useState<InovasiItem[]>(() => {
-    if (typeof window !== "undefined") {
-      try {
-        const stored = localStorage.getItem(STORAGE_KEY);
-        if (stored) return JSON.parse(stored) as InovasiItem[];
-      } catch {}
-    }
-    return INOVASI_SEED as InovasiItem[];
-  });
+  const [items, setItems] = useState<InovasiItem[]>(INOVASI_SEED as InovasiItem[]);
   const [editing, setEditing] = useState<InovasiItem | null>(null);
+  const [origSlug, setOrigSlug] = useState<string | null>(null);
   const [isNew, setIsNew] = useState(false);
   const [saved, setSaved] = useState(false);
+
+  // Read localStorage after client mount (SSR-safe)
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) setItems(JSON.parse(stored) as InovasiItem[]);
+    } catch {}
+  }, []);
 
   if (locked) return <PasswordGate onUnlock={() => setLocked(false)} />;
 
@@ -170,9 +171,9 @@ export default function AdminPage() {
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(newItems)); } catch {}
   };
 
-  const openEdit = (item: InovasiItem) => { setEditing({ ...item }); setIsNew(false); };
-  const openNew = () => { setEditing({ ...defaultItem }); setIsNew(true); };
-  const closeEdit = () => { setEditing(null); setIsNew(false); };
+  const openEdit = (item: InovasiItem) => { setEditing({ ...item }); setOrigSlug(item.slug); setIsNew(false); };
+  const openNew = () => { setEditing({ ...defaultItem }); setOrigSlug(null); setIsNew(true); };
+  const closeEdit = () => { setEditing(null); setOrigSlug(null); setIsNew(false); };
 
   const saveEdit = () => {
     if (!editing) return;
@@ -180,7 +181,9 @@ export default function AdminPage() {
     if (isNew) {
       newItems = [...items, { ...editing, id: Date.now().toString() }];
     } else {
-      newItems = items.map((i) => (i.slug === editing.slug ? editing : i));
+      // Use origSlug (slug before edit) to find the item — handles slug changes
+      const matchSlug = origSlug ?? editing.slug;
+      newItems = items.map((i) => (i.slug === matchSlug ? editing : i));
     }
     setItems(newItems);
     persist(newItems);
