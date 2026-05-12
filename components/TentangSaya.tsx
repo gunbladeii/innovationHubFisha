@@ -1,3 +1,8 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
+
 const PROFIL = {
   nama: "Fisha",
   jawatan: "Nomad Digital",
@@ -56,8 +61,20 @@ const SKILL_GROUPS = [
   },
 ];
 
-const PENGALAMAN = [
-  { tahun: "2020–kini", perkara: "Pembangunan 12+ sistem digital untuk Jemaah Nazir", ikon: "🚀" },
+function useTotalInovasi() {
+  const [total, setTotal] = useState<number | null>(null);
+  useEffect(() => {
+    supabase
+      .from("inovasi")
+      .select("id", { count: "exact", head: true })
+      .then(({ count }) => {
+        if (count !== null) setTotal(count);
+      });
+  }, []);
+  return total;
+}
+
+const PENGALAMAN_STATIC = [
   { tahun: "2023–kini", perkara: "Integrasi AI (Gemini) ke dalam sistem analitik pendidikan", ikon: "🧠" },
   { tahun: "2022–kini", perkara: "Pembangunan aplikasi mudah alih Android & iOS untuk pengurusan pemeriksaan", ikon: "📱" },
   { tahun: "2021–kini", perkara: "Pengurusan pangkalan data cloud — Supabase, Firebase, MongoDB", ikon: "☁️" },
@@ -65,6 +82,16 @@ const PENGALAMAN = [
 ];
 
 export default function TentangSaya() {
+  const totalInovasi = useTotalInovasi();
+  const pengalaman = [
+    {
+      tahun: "2020–kini",
+      perkara: `Pembangunan ${totalInovasi !== null ? `${totalInovasi}+` : "12+"} sistem digital untuk Jemaah Nazir`,
+      ikon: "🚀",
+    },
+    ...PENGALAMAN_STATIC,
+  ];
+
   return (
     <section
       id="tentang"
@@ -75,7 +102,7 @@ export default function TentangSaya() {
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          backgroundImage: "radial-gradient(rgba(59,130,246,0.12) 1px, transparent 1px)",
+          backgroundImage: "radial-gradient(rgba(37,99,235,0.35) 1.5px, transparent 1.5px)",
           backgroundSize: "28px 28px",
         }}
       />
@@ -132,7 +159,7 @@ export default function TentangSaya() {
             <div className="pt-3 border-t" style={{ borderColor: "rgba(59,130,246,0.1)" }}>
               <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">Pengalaman Utama</p>
               <div className="space-y-2.5">
-                {PENGALAMAN.map((p) => (
+                {pengalaman.map((p) => (
                   <div key={p.tahun} className="flex items-start gap-2.5">
                     <span className="text-base flex-shrink-0 mt-0.5">{p.ikon}</span>
                     <div>
