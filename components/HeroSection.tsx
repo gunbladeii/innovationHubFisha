@@ -54,7 +54,10 @@ export default function HeroSection() {
           className="font-bold leading-none mb-6"
           style={{ fontFamily: "var(--font-space-grotesk)" }}
         >
-          <span className="block text-5xl md:text-7xl text-gray-900">
+          <span
+            className="inline-block text-5xl md:text-7xl font-bold px-3 py-1 mb-1"
+            style={{ background: "#F97316", color: "#000000" }}
+          >
             Inovasi Digital
           </span>
           <span className="block text-5xl md:text-7xl" style={{ color: "#1D4ED8" }}>
