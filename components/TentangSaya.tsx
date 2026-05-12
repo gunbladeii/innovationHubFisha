@@ -100,15 +100,26 @@ export default function TentangSaya() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
           {/* Profil */}
           <div
-            className="lg:col-span-1 rounded-2xl p-6 flex flex-col gap-4"
+            className="lg:col-span-1 rounded-2xl overflow-hidden flex flex-col"
             style={{ background: "#FFFFFF", border: "1px solid rgba(59,130,246,0.15)", boxShadow: "0 4px 24px rgba(59,130,246,0.07)" }}
           >
-            <div
-              className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl"
-              style={{ background: "linear-gradient(135deg, #DBEAFE, #EDE9FE)" }}
-            >
-              👨‍💻
+            {/* Hero image */}
+            <div className="relative w-full overflow-hidden" style={{ height: "220px", background: "#0a0a0a" }}>
+              <img
+                src="/profil-fisha.jpeg"
+                alt="Fisha — Inovasi Digital"
+                className="w-full h-full"
+                style={{ objectFit: "cover", objectPosition: "center 15%" }}
+              />
+              {/* gradient overlay bawah untuk blend ke info */}
+              <div
+                className="absolute bottom-0 left-0 right-0 h-16"
+                style={{ background: "linear-gradient(to top, #ffffff, transparent)" }}
+              />
             </div>
+
+            {/* Info */}
+            <div className="flex flex-col gap-4 p-6 pt-4">
             <div>
               <h3 className="font-bold text-gray-900 text-lg" style={{ fontFamily: "var(--font-space-grotesk)" }}>
                 {PROFIL.nama}
@@ -132,7 +143,8 @@ export default function TentangSaya() {
                 ))}
               </div>
             </div>
-          </div>
+            </div> {/* end flex flex-col gap-4 (Info) */}
+          </div> {/* end card */}
 
           {/* Skills grid */}
           <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
