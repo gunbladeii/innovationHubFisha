@@ -1,7 +1,7 @@
 const PROFIL = {
   nama: "Fisha",
-  jawatan: "Pegawai Teknologi Maklumat",
-  organisasi: "Jemaah Nazir, Kementerian Pendidikan Malaysia",
+  jawatan: "Nomad Digital",
+  organisasi: "MoE",
   bio: "Pakar ICT yang berpengalaman dalam pembangunan sistem digital untuk sektor kerajaan dan swasta. Memfokuskan kepada transformasi digital pendidikan melalui inovasi teknologi moden.",
 };
 
