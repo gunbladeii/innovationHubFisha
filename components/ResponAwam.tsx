@@ -74,9 +74,10 @@ export default function ResponAwam() {
       });
       if (error) throw error;
       setSubmitted(true);
-    } catch (err) {
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : JSON.stringify(err);
       console.error("Supabase error:", err);
-      alert("Ralat semasa menghantar. Sila cuba semula.");
+      alert(`Ralat: ${msg}`);
     } finally {
       setLoading(false);
     }

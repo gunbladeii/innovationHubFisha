@@ -2,6 +2,50 @@
 -- FISHA Innovation Hub — Supabase Schema
 -- =============================================
 
+-- =============================================
+-- Table: respon_awam (public feedback form)
+-- Jalankan ini dalam Supabase SQL Editor
+-- =============================================
+CREATE TABLE IF NOT EXISTS respon_awam (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  jenis TEXT NOT NULL CHECK (jenis IN ('cadangan', 'permohonan', 'maklumbalas')),
+  nama TEXT NOT NULL,
+  jawatan TEXT,
+  unit TEXT,
+  email TEXT NOT NULL,
+  keutamaan TEXT NOT NULL DEFAULT 'sederhana' CHECK (keutamaan IN ('rendah', 'sederhana', 'tinggi')),
+  mesej TEXT NOT NULL,
+  status TEXT NOT NULL DEFAULT 'baharu' CHECK (status IN ('baharu', 'dalam-semakan', 'selesai'))
+);
+
+-- Index
+CREATE INDEX IF NOT EXISTS idx_respon_awam_jenis ON respon_awam(jenis);
+CREATE INDEX IF NOT EXISTS idx_respon_awam_created ON respon_awam(created_at DESC);
+
+-- RLS
+ALTER TABLE respon_awam ENABLE ROW LEVEL SECURITY;
+
+-- Awam boleh insert (tanpa log masuk)
+CREATE POLICY "Allow public insert"
+  ON respon_awam FOR INSERT
+  TO anon
+  WITH CHECK (true);
+
+-- Authenticated (admin) boleh baca semua
+CREATE POLICY "Allow admin read"
+  ON respon_awam FOR SELECT
+  TO authenticated
+  USING (true);
+
+-- Authenticated (admin) boleh update status
+CREATE POLICY "Allow admin update"
+  ON respon_awam FOR UPDATE
+  TO authenticated
+  USING (true)
+  WITH CHECK (true);
+
+-- =============================================
 -- Buat table inovasi
 CREATE TABLE IF NOT EXISTS inovasi (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
