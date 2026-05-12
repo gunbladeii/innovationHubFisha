@@ -5,8 +5,7 @@ import InovasiCard from "./InovasiCard";
 import InovasiModal from "./InovasiModal";
 import FilterBar from "./FilterBar";
 import { INOVASI_SEED, type InovasiSeedItem } from "@/lib/data";
-
-const STORAGE_KEY = "fisha_inovasi_data";
+import { supabase } from "@/lib/supabase";
 
 export default function InovasiGrid() {
   const [activeTag, setActiveTag] = useState("Semua");
@@ -15,10 +14,16 @@ export default function InovasiGrid() {
   const [data, setData] = useState<InovasiSeedItem[]>(INOVASI_SEED);
 
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) setData(JSON.parse(stored) as InovasiSeedItem[]);
-    } catch {}
+    supabase
+      .from("inovasi")
+      .select("*")
+      .eq("is_published", true)
+      .order("urutan", { ascending: true })
+      .then(({ data: rows, error }) => {
+        if (!error && rows && rows.length > 0) {
+          setData(rows as InovasiSeedItem[]);
+        }
+      });
   }, []);
 
   const filtered = useMemo(() => {

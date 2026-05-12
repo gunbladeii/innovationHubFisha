@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { INOVASI_SEED, STATUS_CONFIG } from "@/lib/data";
+import type { Inovasi } from "@/lib/database.types";
 import {
   Plus,
   Pencil,
@@ -17,9 +18,12 @@ import {
 } from "lucide-react";
 
 const ADMIN_PASSWORD = "FISHA2026-UD";
-const STORAGE_KEY = "fisha_inovasi_data";
 
-type InovasiItem = (typeof INOVASI_SEED)[number] & { id?: string };
+type InovasiItem = Omit<Inovasi, "created_at" | "updated_at"> & {
+  id?: string;
+  created_at?: string;
+  updated_at?: string;
+};
 
 const defaultItem: InovasiItem = {
   nama: "",
@@ -151,58 +155,95 @@ function PasswordGate({ onUnlock }: { onUnlock: () => void }) {
 /* â”€â”€â”€ Main Page â”€â”€â”€ */
 export default function AdminPage() {
   const [locked, setLocked] = useState(true);
-  const [items, setItems] = useState<InovasiItem[]>(INOVASI_SEED as InovasiItem[]);
+  const [items, setItems] = useState<InovasiItem[]>([]);
   const [editing, setEditing] = useState<InovasiItem | null>(null);
   const [origSlug, setOrigSlug] = useState<string | null>(null);
   const [isNew, setIsNew] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  // Read localStorage after client mount (SSR-safe)
+  // Fetch dari Supabase selepas unlock
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) setItems(JSON.parse(stored) as InovasiItem[]);
-    } catch {}
-  }, []);
+    if (locked) return;
+    setLoading(true);
+    fetch("/api/inovasi", {
+      headers: { Authorization: `Bearer ${ADMIN_PASSWORD}` },
+    })
+      .then((r) => r.json())
+      .then((rows) => {
+        if (Array.isArray(rows)) setItems(rows as InovasiItem[]);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, [locked]);
 
   if (locked) return <PasswordGate onUnlock={() => setLocked(false)} />;
-
-  const persist = (newItems: InovasiItem[]) => {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(newItems)); } catch {}
-  };
 
   const openEdit = (item: InovasiItem) => { setEditing({ ...item }); setOrigSlug(item.slug); setIsNew(false); };
   const openNew = () => { setEditing({ ...defaultItem }); setOrigSlug(null); setIsNew(true); };
   const closeEdit = () => { setEditing(null); setOrigSlug(null); setIsNew(false); };
 
-  const saveEdit = () => {
+  const saveEdit = async () => {
     if (!editing) return;
-    let newItems: InovasiItem[];
+    setLoading(true);
+    // Strip server-managed fields sebelum hantar ke API
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { id: _id, created_at: _ca, updated_at: _ua, ...payload } = editing as Record<string, unknown>;
+    const matchSlug = origSlug ?? editing.slug;
     if (isNew) {
-      newItems = [...items, { ...editing, id: Date.now().toString() }];
+      const res = await fetch("/api/inovasi", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${ADMIN_PASSWORD}`,
+        },
+        body: JSON.stringify(payload),
+      });
+      if (res.ok) {
+        const newItem = await res.json() as InovasiItem;
+        setItems((prev) => [...prev, newItem]);
+      }
     } else {
-      // Use origSlug (slug before edit) to find the item — handles slug changes
-      const matchSlug = origSlug ?? editing.slug;
-      newItems = items.map((i) => (i.slug === matchSlug ? editing : i));
+      const res = await fetch(`/api/inovasi/${matchSlug}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${ADMIN_PASSWORD}`,
+        },
+        body: JSON.stringify(payload),
+      });
+      if (res.ok) {
+        setItems((prev) => prev.map((i) => (i.slug === matchSlug ? editing : i)));
+      }
     }
-    setItems(newItems);
-    persist(newItems);
+    setLoading(false);
     setSaved(true);
     setTimeout(() => setSaved(false), 2500);
     closeEdit();
   };
 
-  const deleteItem = (slug: string) => {
+  const deleteItem = async (slug: string) => {
     if (!confirm("Padam inovasi ini?")) return;
-    const newItems = items.filter((i) => i.slug !== slug);
-    setItems(newItems);
-    persist(newItems);
+    const res = await fetch(`/api/inovasi/${slug}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${ADMIN_PASSWORD}` },
+    });
+    if (res.ok) setItems((prev) => prev.filter((i) => i.slug !== slug));
   };
 
-  const togglePublish = (slug: string) => {
-    const newItems = items.map((i) => (i.slug === slug ? { ...i, is_published: !i.is_published } : i));
-    setItems(newItems);
-    persist(newItems);
+  const togglePublish = async (slug: string) => {
+    const item = items.find((i) => i.slug === slug);
+    if (!item) return;
+    const newVal = !item.is_published;
+    const res = await fetch(`/api/inovasi/${slug}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${ADMIN_PASSWORD}`,
+      },
+      body: JSON.stringify({ is_published: newVal }),
+    });
+    if (res.ok) setItems((prev) => prev.map((i) => (i.slug === slug ? { ...i, is_published: newVal } : i)));
   };
 
   if (editing) {
@@ -213,6 +254,7 @@ export default function AdminPage() {
         onChange={setEditing}
         onSave={saveEdit}
         onCancel={closeEdit}
+        isSaving={loading}
       />
     );
   }
@@ -275,7 +317,7 @@ export default function AdminPage() {
           <h1 className="text-2xl font-bold text-white" style={{ fontFamily: "var(--font-space-grotesk)" }}>
             Senarai Inovasi
           </h1>
-          <p className="text-sm text-gray-600 mt-0.5">{items.length} inovasi direkodkan</p>
+          <p className="text-sm text-gray-600 mt-0.5">{loading ? "Memuatkan data..." : `${items.length} inovasi direkodkan`}</p>
         </div>
 
         {/* Table */}
@@ -375,7 +417,7 @@ export default function AdminPage() {
         </div>
 
         <p className="mt-4 text-xs text-center" style={{ color: "#3A3A4A" }}>
-          Mode demo â€” data disimpan dalam state sahaja. Sambungkan Supabase untuk persistence.
+          Data disimpan dalam Supabase — perubahan dipaparkan kepada semua pengguna secara langsung.
         </p>
       </main>
     </div>
@@ -389,12 +431,14 @@ function EditForm({
   onChange,
   onSave,
   onCancel,
+  isSaving,
 }: {
   item: InovasiItem;
   isNew: boolean;
   onChange: (i: InovasiItem) => void;
   onSave: () => void;
   onCancel: () => void;
+  isSaving?: boolean;
 }) {
   const set = (field: keyof InovasiItem, value: unknown) =>
     onChange({ ...item, [field]: value });
@@ -428,9 +472,9 @@ function EditForm({
               <X size={14} />
               Batal
             </button>
-            <button onClick={onSave} className="btn-primary text-sm">
+            <button onClick={onSave} disabled={isSaving} className="btn-primary text-sm" style={{ opacity: isSaving ? 0.6 : 1 }}>
               <Save size={14} />
-              Simpan
+              {isSaving ? "Menyimpan..." : "Simpan"}
             </button>
           </div>
         </div>
