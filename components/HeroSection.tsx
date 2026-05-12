@@ -1,3 +1,8 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
+
 const MARQUEE_ITEMS = [
   "Next.js 15", "React", "TypeScript", "Supabase", "Firebase",
   "Laravel", "PHP", "Python", "Google Apps Script", "Tailwind CSS",
@@ -5,14 +10,39 @@ const MARQUEE_ITEMS = [
   "Chart.js", "Google Workspace",
 ];
 
-const STAT_CARDS = [
-  { value: "12", label: "Sistem Dibangunkan", sub: "2020–2026" },
-  { value: "10", label: "Sistem Aktif", sub: "Dalam operasi" },
-  { value: "5+", label: "Tahun Inovasi", sub: "Berterusan" },
-];
+type Stats = {
+  total: string;
+  aktif: string;
+  yearRange: string;
+};
 
 export default function HeroSection() {
   const doubled = [...MARQUEE_ITEMS, ...MARQUEE_ITEMS];
+  const [stats, setStats] = useState<Stats>({
+    total: "—",
+    aktif: "—",
+    yearRange: "...",
+  });
+
+  useEffect(() => {
+    supabase
+      .from("inovasi")
+      .select("status, tahun")
+      .then(({ data }) => {
+        if (!data || data.length === 0) return;
+        const total = data.length;
+        const aktif = data.filter((d) => d.status === "aktif").length;
+        const years = data.map((d) => d.tahun).filter(Boolean) as number[];
+        const minYear = Math.min(...years);
+        const maxYear = Math.max(...years);
+        const span = maxYear - minYear;
+        setStats({
+          total: String(total),
+          aktif: String(aktif),
+          yearRange: `${minYear}–${maxYear}`,
+        });
+      });
+  }, []);
 
   return (
     <section
@@ -23,7 +53,7 @@ export default function HeroSection() {
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          backgroundImage: "radial-gradient(rgba(59,130,246,0.18) 1px, transparent 1px)",
+          backgroundImage: "radial-gradient(rgba(37,99,235,0.45) 1.5px, transparent 1.5px)",
           backgroundSize: "28px 28px",
         }}
       />
@@ -72,7 +102,11 @@ export default function HeroSection() {
 
         {/* Bento stat cards */}
         <div className="grid grid-cols-3 gap-3 max-w-md">
-          {STAT_CARDS.map((s) => (
+          {[
+            { value: stats.total, label: "Sistem Dibangunkan", sub: stats.yearRange },
+            { value: stats.aktif, label: "Sistem Aktif", sub: "Dalam operasi" },
+            { value: "5+", label: "Tahun Inovasi", sub: "Berterusan" },
+          ].map((s) => (
             <div
               key={s.label}
               className="rounded-2xl p-4 flex flex-col gap-1"
