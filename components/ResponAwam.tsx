@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Send, CheckCircle, MessageSquare, Lightbulb, FolderOpen } from "lucide-react";
+import { supabase } from "@/lib/supabase";
 
 type JenisRespon = "cadangan" | "permohonan" | "maklumbalas";
 
@@ -61,10 +62,24 @@ export default function ResponAwam() {
     e.preventDefault();
     if (!form.nama || !form.email || !form.mesej) return;
     setLoading(true);
-    // Simulate submission (replace with actual API/Supabase call later)
-    await new Promise((r) => setTimeout(r, 1200));
-    setLoading(false);
-    setSubmitted(true);
+    try {
+      const { error } = await supabase.from("respon_awam").insert({
+        jenis: form.jenis,
+        nama: form.nama,
+        jawatan: form.jawatan || null,
+        unit: form.unit || null,
+        email: form.email,
+        keutamaan: form.keutamaan,
+        mesej: form.mesej,
+      });
+      if (error) throw error;
+      setSubmitted(true);
+    } catch (err) {
+      console.error("Supabase error:", err);
+      alert("Ralat semasa menghantar. Sila cuba semula.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const reset = () => {
