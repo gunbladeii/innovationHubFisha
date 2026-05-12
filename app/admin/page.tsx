@@ -135,7 +135,7 @@ function PasswordGate({ onUnlock }: { onUnlock: () => void }) {
         </div>
 
         <p className="text-center text-xs text-gray-700">
-          Jemaah Nazir Â· Kementerian Pendidikan Malaysia
+          Fisha Â· MoE
         </p>
       </div>
 

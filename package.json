@@ -1,7 +1,7 @@
 {
   "name": "fisha-innovation-hub",
   "version": "1.0.0",
-  "description": "FISHA Innovation Hub - Portal Inovasi Digital Jemaah Nazir",
+  "description": "FISHA Innovation Hub - Portal Inovasi Digital",
   "private": true,
   "scripts": {
     "dev": "next dev",

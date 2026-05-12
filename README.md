@@ -116,4 +116,4 @@ npm run lint     # Semak linting
 
 ---
 
-Dibangunkan oleh **Jemaah Nazir**, Kementerian Pendidikan Malaysia.
+Dibangunkan oleh **Fisha**, MoE.

@@ -2,14 +2,14 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "FISHA Innovation Hub | Portal Inovasi Digital Jemaah Nazir",
+  title: "FISHA Innovation Hub | Portal Inovasi Digital",
   description:
-    "Showcase inovasi digital yang dibangunkan oleh Jemaah Nazir — sistem-sistem moden untuk transformasi pendidikan Malaysia.",
+    "Showcase inovasi digital yang dibangunkan oleh Fisha — sistem-sistem moden untuk transformasi pendidikan Malaysia.",
   keywords: ["Fisha", "inovasi digital", "sistem pendidikan", "FISHA", "MOE Malaysia"],
   authors: [{ name: "Fisha" }],
   openGraph: {
     title: "FISHA Innovation Hub",
-    description: "Portal Inovasi Digital Jemaah Nazir",
+    description: "Portal Inovasi Digital",
     type: "website",
     locale: "ms_MY",
   },
