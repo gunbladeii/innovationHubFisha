@@ -36,13 +36,15 @@ export default function InovasiModal({ item, onClose }: Props) {
 
       {/* Modal */}
       <div
-        className="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto animate-fade-in"
+        className="relative rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto animate-fade-in"
+        style={{ background: "#131317", border: "1px solid rgba(255,255,255,0.1)" }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute top-3 right-3 z-10 w-8 h-8 bg-black/10 hover:bg-black/20 rounded-full flex items-center justify-center transition-colors"
+          className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full flex items-center justify-center transition-colors text-gray-400 hover:text-white"
+          style={{ background: "rgba(255,255,255,0.08)" }}
         >
           <X size={15} />
         </button>
@@ -99,10 +101,10 @@ export default function InovasiModal({ item, onClose }: Props) {
                 {item.ikon}
               </div>
               <div>
-                <h2 className="font-bold text-gray-900 text-xl leading-tight">
+                <h2 className="font-bold text-white text-xl leading-tight">
                   {item.nama}
                 </h2>
-                <span className="text-sm text-gray-400">{item.tahun}</span>
+                <span className="text-sm text-gray-600">{item.tahun}</span>
               </div>
             </div>
             <span
@@ -115,22 +117,23 @@ export default function InovasiModal({ item, onClose }: Props) {
 
           {/* Deskripsi */}
           <div className="space-y-2">
-            <p className="text-sm text-gray-700 leading-relaxed">{item.deskripsi}</p>
+            <p className="text-sm text-gray-300 leading-relaxed">{item.deskripsi}</p>
             {item.deskripsi_panjang && (
-              <p className="text-sm text-gray-500 leading-relaxed">{item.deskripsi_panjang}</p>
+              <p className="text-sm text-gray-500 leading-relaxed whitespace-pre-line">{item.deskripsi_panjang}</p>
             )}
           </div>
 
           {/* Tech Stack */}
           <div>
-            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">
+            <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide mb-2">
               Tech Stack
             </p>
             <div className="flex flex-wrap gap-1.5">
               {item.tech_stack.map((tech) => (
                 <span
                   key={tech}
-                  className="px-2.5 py-1 bg-gray-50 border border-gray-200 rounded-lg text-xs text-gray-700 font-medium"
+                  className="px-2.5 py-1 rounded-lg text-xs font-medium"
+                  style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", color: "#D1D5DB" }}
                 >
                   {tech}
                 </span>
@@ -140,7 +143,7 @@ export default function InovasiModal({ item, onClose }: Props) {
 
           {/* Feature Tags */}
           <div>
-            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">
+            <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide mb-2">
               Kategori
             </p>
             <div className="flex flex-wrap gap-1.5">
@@ -162,7 +165,7 @@ export default function InovasiModal({ item, onClose }: Props) {
 
           {/* Action Links */}
           {(item.link_demo || item.link_github) && (
-            <div className="flex gap-2 pt-2 border-t border-gray-100">
+            <div className="flex gap-2 pt-2" style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
               {item.link_demo && (
                 <a
                   href={item.link_demo}

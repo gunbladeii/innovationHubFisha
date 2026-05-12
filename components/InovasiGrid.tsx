@@ -48,8 +48,8 @@ export default function InovasiGrid() {
       {filtered.length === 0 ? (
         <div className="text-center py-20">
           <p className="text-5xl mb-4">🔍</p>
-          <p className="text-gray-500 text-lg font-medium">Tiada inovasi dijumpai</p>
-          <p className="text-gray-400 text-sm mt-1">Cuba ubah carian atau tapis yang lain</p>
+          <p className="text-gray-600 text-lg font-medium">Tiada inovasi dijumpai</p>
+          <p className="text-gray-700 text-sm mt-1">Cuba ubah carian atau tapis yang lain</p>
           <button
             onClick={() => { setActiveTag("Semua"); setSearchQuery(""); }}
             className="mt-4 btn-secondary"

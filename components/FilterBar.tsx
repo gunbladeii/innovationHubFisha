@@ -33,7 +33,8 @@ export default function FilterBar({
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
           placeholder="Cari inovasi..."
-          className="w-full pl-9 pr-9 py-2.5 bg-white border border-gray-200 rounded-xl text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent shadow-sm transition-all"
+          className="w-full pl-9 pr-9 py-2.5 rounded-xl text-sm text-gray-200 placeholder-gray-600 focus:outline-none focus:ring-1 focus:ring-brand-500 transition-all"
+          style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)" }}
         />
         {searchQuery && (
           <button
@@ -61,10 +62,10 @@ export default function FilterBar({
       </div>
 
       {/* Results count */}
-      <p className="text-sm text-gray-500">
+      <p className="text-sm text-gray-600">
         Menunjukkan{" "}
-        <span className="font-semibold text-gray-700">{count}</span> daripada{" "}
-        <span className="font-semibold text-gray-700">{total}</span> inovasi
+        <span className="font-semibold text-gray-400">{count}</span> daripada{" "}
+        <span className="font-semibold text-gray-400">{total}</span> inovasi
         {activeTag !== "Semua" && (
           <span className="text-brand-600">
             {" "}

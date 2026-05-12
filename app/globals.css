@@ -7,21 +7,22 @@
 :root {
   --font-plus-jakarta: 'Plus Jakarta Sans', system-ui, sans-serif;
   --font-space-grotesk: 'Space Grotesk', system-ui, sans-serif;
+  --bg-base: #0B0B0F;
+  --bg-card: #111116;
+  --bg-elevated: #18181F;
+  --border: rgba(255, 255, 255, 0.07);
+  --border-hover: rgba(59, 130, 246, 0.35);
 }
 
 @layer base {
-  * {
-    box-sizing: border-box;
-  }
-  
-  html {
-    scroll-behavior: smooth;
-  }
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
 
   body {
     font-family: var(--font-plus-jakarta);
-    background-color: #F8FAFF;
-    color: #0F172A;
+    background-color: var(--bg-base);
+    color: #F2F2F7;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -36,7 +37,8 @@
     @apply transition-all duration-300;
   }
   .card-hover:hover {
-    @apply -translate-y-1 shadow-lg;
+    @apply -translate-y-1;
+    box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.25), 0 12px 32px rgba(0, 0, 0, 0.5);
   }
 
   .tag-pill {
@@ -44,21 +46,23 @@
   }
 
   .btn-primary {
-    @apply inline-flex items-center gap-2 px-4 py-2 bg-brand-600 text-white text-sm font-semibold rounded-lg transition-colors duration-150 shadow-sm;
+    @apply inline-flex items-center gap-2 px-4 py-2 bg-brand-600 text-white text-sm font-semibold rounded-lg transition-colors duration-150;
   }
   .btn-primary:hover {
     @apply bg-brand-700;
   }
 
   .btn-secondary {
-    @apply inline-flex items-center gap-2 px-4 py-2 bg-white text-gray-700 text-sm font-medium rounded-lg border border-gray-200 transition-colors duration-150;
+    @apply inline-flex items-center gap-2 px-4 py-2 text-gray-300 text-sm font-medium rounded-lg transition-colors duration-150;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
   .btn-secondary:hover {
-    @apply bg-gray-50;
+    background: rgba(255, 255, 255, 0.10);
   }
 
   .section-title {
-    @apply text-3xl md:text-4xl font-bold text-gray-900;
+    @apply text-3xl md:text-4xl font-bold text-white;
     font-family: var(--font-space-grotesk);
   }
 
@@ -67,42 +71,35 @@
   }
 
   .filter-chip-active {
-    @apply bg-brand-600 text-white border-brand-600 shadow-sm;
+    @apply bg-brand-600 text-white border-brand-600;
   }
 
   .filter-chip-inactive {
-    @apply bg-white text-gray-600 border-gray-200;
+    color: #6B6B80;
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.08);
   }
   .filter-chip-inactive:hover {
-    border-color: #93C5FD;
-    color: #2563EB;
+    background: rgba(59, 130, 246, 0.08);
+    border-color: rgba(59, 130, 246, 0.3);
+    color: #93C5FD;
   }
 }
 
-/* Scrollbar styling */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-::-webkit-scrollbar-track {
-  background: #F1F5F9;
-}
-::-webkit-scrollbar-thumb {
-  background: #CBD5E1;
-  border-radius: 3px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #94A3B8;
-}
+/* Scrollbar */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: #0B0B0F; }
+::-webkit-scrollbar-thumb { background: #2A2A35; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #3A3A48; }
 
-/* Card shimmer effect on hover */
+/* Card glow border on hover */
 .innovation-card::before {
   content: '';
   position: absolute;
   inset: 0;
   border-radius: inherit;
   padding: 1px;
-  background: linear-gradient(135deg, transparent 40%, rgba(59, 130, 246, 0.15) 100%);
+  background: linear-gradient(135deg, transparent 40%, rgba(59, 130, 246, 0.2) 100%);
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
@@ -110,7 +107,5 @@
   opacity: 0;
   transition: opacity 0.3s ease;
 }
+.innovation-card:hover::before { opacity: 1; }
 
-.innovation-card:hover::before {
-  opacity: 1;
-}
