@@ -233,6 +233,110 @@ export const INOVASI_SEED: InovasiSeedItem[] = [
   },
 ];
 
+// ─── CV / Resume Data ────────────────────────────────────────────────────────
+
+export const CV_PERSONAL = {
+  nama: "Fisha",
+  jawatan: "Pembangun Sistem Digital | Pakar ICT Pendidikan",
+  organisasi: "Jemaah Nazir, Kementerian Pendidikan Malaysia",
+  lokasi: "Kuala Lumpur, Malaysia",
+  email: "——@moe.gov.my",
+  telefon: "+60 ——",
+  bio: "Pakar ICT yang berpengalaman dalam pembangunan sistem digital inovatif untuk sektor kerajaan. Membangunkan 12+ sistem digital dalam tempoh 5+ tahun untuk meningkatkan kecekapan pemeriksaan sekolah dan transformasi pendidikan Malaysia. Pakar dalam web development moden, integrasi AI, cloud computing dan pembangunan aplikasi mudah alih.",
+};
+
+export const CV_PENDIDIKAN = [
+  {
+    tahun: "——",
+    kelayakan: "——",
+    bidang: "——",
+    institusi: "——",
+  },
+];
+
+export const CV_PENGALAMAN = [
+  {
+    tahun: "2020 – kini",
+    jawatan: "Pembangun Sistem Digital",
+    org: "Jemaah Nazir, KPM",
+    desc: "Membangunkan dan menyelenggara 12+ sistem digital bagi transformasi proses pemeriksaan sekolah dan pengurusan pendidikan negara.",
+  },
+  {
+    tahun: "2020 – kini",
+    jawatan: "Pembangun Aplikasi Mudah Alih",
+    org: "Jemaah Nazir, KPM",
+    desc: "Mereka bentuk dan membangunkan aplikasi cross-platform (Android & iOS) bagi sokongan pemeriksaan lapangan.",
+  },
+  {
+    tahun: "2023 – kini",
+    jawatan: "AI Integration Specialist",
+    org: "Jemaah Nazir, KPM",
+    desc: "Mengintegrasikan Gemini AI ke dalam sistem analitik pendidikan untuk laporan dinamik dan cadangan pintar.",
+  },
+];
+
+export const CV_PENCAPAIAN = [
+  "Membangunkan 12+ sistem digital dalam masa 5 tahun untuk Jemaah Nazir, KPM",
+  "Mempelopori integrasi AI (Gemini) dalam sistem analitik pendidikan sektor awam Malaysia",
+  "Mengurangkan masa pemprosesan tuntutan & pemantauan sekolah melalui automasi digital penuh",
+  "Membangunkan aplikasi mudah alih cross-platform (Android & iOS) untuk pengurusan pemeriksaan",
+  "Mengimplementasi CI/CD pipeline (GitLab) untuk deployment berterusan sistem kerajaan",
+  "Membina ekosistem digital bersepadu: web + mobile + AI + cloud dalam satu platform",
+];
+
+export const SKILL_GROUPS = [
+  {
+    kategori: "Web & Frontend",
+    warna: "#3B82F6",
+    ikon: "🌐",
+    kemahiran: ["Next.js 15", "React", "TypeScript", "Tailwind CSS", "HTML5 / CSS3", "Vite", "Framer Motion"],
+  },
+  {
+    kategori: "Backend & API",
+    warna: "#8B5CF6",
+    ikon: "⚙️",
+    kemahiran: ["Node.js", "Laravel (PHP)", "REST API", "Python (Flask)", "Google Apps Script", "Webhooks"],
+  },
+  {
+    kategori: "Database & Cloud",
+    warna: "#06B6D4",
+    ikon: "🗄️",
+    kemahiran: ["Supabase", "Firebase", "MySQL", "PostgreSQL", "MongoDB", "Vercel", "Google Cloud"],
+  },
+  {
+    kategori: "Mobile — Android",
+    warna: "#10B981",
+    ikon: "🤖",
+    kemahiran: ["React Native", "Expo", "Android Studio", "Firebase FCM", "QR Code Integration", "Offline-first"],
+  },
+  {
+    kategori: "Mobile — iOS",
+    warna: "#64748B",
+    ikon: "🍎",
+    kemahiran: ["React Native (iOS)", "Expo EAS Build", "TestFlight", "Apple Push Notification", "Swift (asas)"],
+  },
+  {
+    kategori: "Sistem Kerajaan",
+    warna: "#F59E0B",
+    ikon: "🏛️",
+    kemahiran: ["MyGov API", "Sistem SAGA", "ePerolehan", "HRMIS", "SPP (Sistem Perkhidmatan Pendidikan)", "Google Workspace for Edu"],
+  },
+  {
+    kategori: "Produktiviti & Tools",
+    warna: "#EF4444",
+    ikon: "🛠️",
+    kemahiran: ["Git / GitHub", "VS Code", "Figma", "Postman", "Power BI", "Google Looker Studio", "Microsoft 365"],
+  },
+  {
+    kategori: "AI & Analitik",
+    warna: "#EC4899",
+    ikon: "🤖",
+    kemahiran: ["Gemini AI", "OpenAI API", "Chart.js", "Google Analytics", "Prompt Engineering", "AI Integration"],
+  },
+];
+
+// ─── Tags & Status ────────────────────────────────────────────────────────────
+
 export const ALL_TAGS = [
   "Semua",
   "Web App",

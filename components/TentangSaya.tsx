@@ -2,64 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
+import { SKILL_GROUPS, CV_PERSONAL } from "@/lib/data";
 
 const PROFIL = {
-  nama: "Fisha",
-  jawatan: "Nomad Digital",
-  organisasi: "MoE",
-  bio: "Pakar ICT yang berpengalaman dalam pembangunan sistem digital untuk sektor kerajaan dan swasta. Memfokuskan kepada transformasi digital pendidikan melalui inovasi teknologi moden.",
+  nama: CV_PERSONAL.nama,
+  jawatan: CV_PERSONAL.jawatan,
+  organisasi: CV_PERSONAL.organisasi,
+  bio: CV_PERSONAL.bio,
 };
-
-const SKILL_GROUPS = [
-  {
-    kategori: "Web & Frontend",
-    warna: "#3B82F6",
-    ikon: "🌐",
-    kemahiran: ["Next.js 15", "React", "TypeScript", "Tailwind CSS", "HTML5 / CSS3", "Vite", "Framer Motion"],
-  },
-  {
-    kategori: "Backend & API",
-    warna: "#8B5CF6",
-    ikon: "⚙️",
-    kemahiran: ["Node.js", "Laravel (PHP)", "REST API", "Python (Flask)", "Google Apps Script", "Webhooks"],
-  },
-  {
-    kategori: "Database & Cloud",
-    warna: "#06B6D4",
-    ikon: "🗄️",
-    kemahiran: ["Supabase", "Firebase", "MySQL", "PostgreSQL", "MongoDB", "Vercel", "Google Cloud"],
-  },
-  {
-    kategori: "Mobile — Android",
-    warna: "#10B981",
-    ikon: "🤖",
-    kemahiran: ["React Native", "Expo", "Android Studio", "Firebase FCM", "QR Code Integration", "Offline-first"],
-  },
-  {
-    kategori: "Mobile — iOS",
-    warna: "#64748B",
-    ikon: "🍎",
-    kemahiran: ["React Native (iOS)", "Expo EAS Build", "TestFlight", "Apple Push Notification", "Swift (asas)"],
-  },
-  {
-    kategori: "Sistem Kerajaan",
-    warna: "#F59E0B",
-    ikon: "🏛️",
-    kemahiran: ["MyGov API", "Sistem SAGA", "ePerolehan", "HRMIS", "SPP (Sistem Perkhidmatan Pendidikan)", "Google Workspace for Edu"],
-  },
-  {
-    kategori: "Produktiviti & Tools",
-    warna: "#EF4444",
-    ikon: "🛠️",
-    kemahiran: ["Git / GitHub", "VS Code", "Figma", "Postman", "Power BI", "Google Looker Studio", "Microsoft 365"],
-  },
-  {
-    kategori: "AI & Analitik",
-    warna: "#EC4899",
-    ikon: "🤖",
-    kemahiran: ["Gemini AI", "OpenAI API", "Chart.js", "Google Analytics", "Prompt Engineering", "AI Integration"],
-  },
-];
 
 function useTotalInovasi() {
   const [total, setTotal] = useState<number | null>(null);

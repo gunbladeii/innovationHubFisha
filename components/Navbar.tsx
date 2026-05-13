@@ -1,4 +1,5 @@
 import { Cpu } from "lucide-react";
+import PDFDownloadButton from "./PDFDownloadButton";
 
 export default function Navbar() {
   return (
@@ -43,6 +44,7 @@ export default function Navbar() {
           >
             Cadangan
           </a>
+          <PDFDownloadButton variant="navbar" />
           <a
             href="/admin"
             className="btn-primary text-xs py-1.5 px-3"

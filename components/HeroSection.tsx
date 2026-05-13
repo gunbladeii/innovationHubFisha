@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
+import PDFDownloadButton from "./PDFDownloadButton";
 
 const MARQUEE_ITEMS = [
   "Next.js 15", "React", "TypeScript", "Supabase", "Firebase",
@@ -35,7 +36,6 @@ export default function HeroSection() {
         const years = data.map((d) => d.tahun).filter(Boolean) as number[];
         const minYear = Math.min(...years);
         const maxYear = Math.max(...years);
-        const span = maxYear - minYear;
         setStats({
           total: String(total),
           aktif: String(aktif),
@@ -101,7 +101,7 @@ export default function HeroSection() {
         </p>
 
         {/* Bento stat cards */}
-        <div className="grid grid-cols-3 gap-3 max-w-md">
+        <div className="grid grid-cols-3 gap-3 max-w-md mb-8">
           {[
             { value: stats.total, label: "Sistem Dibangunkan", sub: stats.yearRange },
             { value: stats.aktif, label: "Sistem Aktif", sub: "Dalam operasi" },
@@ -123,6 +123,22 @@ export default function HeroSection() {
               <span className="text-xs text-gray-400">{s.sub}</span>
             </div>
           ))}
+        </div>
+
+        {/* CTA row */}
+        <div className="flex items-center gap-3 flex-wrap">
+          <PDFDownloadButton variant="hero" />
+          <a
+            href="#inovasi"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-medium text-sm transition-all duration-200 hover:-translate-y-0.5"
+            style={{
+              background: "rgba(59,130,246,0.08)",
+              color: "#1D4ED8",
+              border: "1px solid rgba(59,130,246,0.2)",
+            }}
+          >
+            Lihat Portfolio Inovasi →
+          </a>
         </div>
       </div>
 
