@@ -249,7 +249,7 @@ export const CV_PERSONAL = {
 export const CV_PENDIDIKAN = [
   {
     tahun: "2007",
-    kelayakan: "Ijazah Sarjana Muda (Kelas Ke-2)",
+    kelayakan: "Ijazah Sarjana Muda",
     bidang: "Pendidikan",
     institusi: "Universiti Utara Malaysia (UUM)",
   },
