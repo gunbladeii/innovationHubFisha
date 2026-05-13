@@ -88,7 +88,7 @@ export default function CVTemplate() {
             {[
               { icon: "📍", text: CV_PERSONAL.lokasi },
               { icon: "✉️", text: CV_PERSONAL.email },
-              { icon: "📞", text: CV_PERSONAL.telefon },
+              { icon: "📞", text: `${CV_PERSONAL.telefon} | ${CV_PERSONAL.telefonPejabat}` },
             ].map((c) => (
               <span
                 key={c.text}

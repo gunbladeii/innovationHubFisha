@@ -236,42 +236,49 @@ export const INOVASI_SEED: InovasiSeedItem[] = [
 // ─── CV / Resume Data ────────────────────────────────────────────────────────
 
 export const CV_PERSONAL = {
-  nama: "Fisha",
-  jawatan: "Pembangun Sistem Digital | Pakar ICT Pendidikan",
+  nama: "Mohd Fisha Hafiz Bin Abidin",
+  jawatan: "Pegawai ICT | Pembangun Sistem Digital",
   organisasi: "Jemaah Nazir, Kementerian Pendidikan Malaysia",
   lokasi: "Kuala Lumpur, Malaysia",
-  email: "——@moe.gov.my",
-  telefon: "+60 ——",
-  bio: "Pakar ICT yang berpengalaman dalam pembangunan sistem digital inovatif untuk sektor kerajaan. Membangunkan 12+ sistem digital dalam tempoh 5+ tahun untuk meningkatkan kecekapan pemeriksaan sekolah dan transformasi pendidikan Malaysia. Pakar dalam web development moden, integrasi AI, cloud computing dan pembangunan aplikasi mudah alih.",
+  email: "fisha@moe.gov.my",
+  telefon: "013-4159484",
+  telefonPejabat: "03-88844250",
+  bio: "Pegawai ICT berpengalaman dalam pembangunan sistem digital inovatif untuk sektor kerajaan. Berkhidmat dalam sektor pendidikan awam sejak 2008, kini membangunkan 12+ sistem digital di Jemaah Nazir bagi meningkatkan kecekapan pemeriksaan sekolah dan transformasi pendidikan Malaysia. Pakar dalam web development moden, integrasi AI, cloud computing dan pembangunan aplikasi mudah alih.",
 };
 
 export const CV_PENDIDIKAN = [
   {
-    tahun: "——",
-    kelayakan: "——",
-    bidang: "——",
-    institusi: "——",
+    tahun: "2007",
+    kelayakan: "Ijazah Sarjana Muda (Kelas Ke-2)",
+    bidang: "Pendidikan",
+    institusi: "Universiti Utara Malaysia (UUM)",
   },
 ];
 
 export const CV_PENGALAMAN = [
   {
-    tahun: "2020 – kini",
-    jawatan: "Pembangun Sistem Digital",
+    tahun: "2017 – kini",
+    jawatan: "Pegawai ICT / Pembangun Sistem Digital",
     org: "Jemaah Nazir, KPM",
-    desc: "Membangunkan dan menyelenggara 12+ sistem digital bagi transformasi proses pemeriksaan sekolah dan pengurusan pendidikan negara.",
+    desc: "Membangunkan dan menyelenggara 12+ sistem digital bagi transformasi proses pemeriksaan sekolah dan pengurusan pendidikan negara. Mengintegrasikan teknologi AI, cloud dan mobile dalam ekosistem digital Jemaah Nazir.",
   },
   {
-    tahun: "2020 – kini",
-    jawatan: "Pembangun Aplikasi Mudah Alih",
-    org: "Jemaah Nazir, KPM",
-    desc: "Mereka bentuk dan membangunkan aplikasi cross-platform (Android & iOS) bagi sokongan pemeriksaan lapangan.",
+    tahun: "2014 – 2017",
+    jawatan: "Pegawai ICT",
+    org: "Bahagian Buku Teks, KPM",
+    desc: "Berkhidmat dalam pengurusan teknologi maklumat dan pembangunan sistem di Bahagian Buku Teks, Kementerian Pendidikan Malaysia.",
   },
   {
-    tahun: "2023 – kini",
-    jawatan: "AI Integration Specialist",
-    org: "Jemaah Nazir, KPM",
-    desc: "Mengintegrasikan Gemini AI ke dalam sistem analitik pendidikan untuk laporan dinamik dan cadangan pintar.",
+    tahun: "2014",
+    jawatan: "Pegawai ICT",
+    org: "Bahagian Teknologi Pendidikan, KPM",
+    desc: "Berkhidmat dalam pengurusan dan pembangunan teknologi pendidikan di peringkat kementerian.",
+  },
+  {
+    tahun: "2008 – 2014",
+    jawatan: "Guru / Pegawai Pendidikan",
+    org: "SMK Lutong",
+    desc: "Berkhidmat sebagai pendidik dalam sektor pendidikan awam, menjadi asas pengalaman dalam bidang pendidikan dan teknologi.",
   },
 ];
 
