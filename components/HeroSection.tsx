@@ -79,21 +79,15 @@ export default function HeroSection() {
           </span>
         </div>
 
-        {/* Bold split heading */}
-        <h1
-          className="font-bold leading-none mb-6"
-          style={{ fontFamily: "var(--font-space-grotesk)" }}
-        >
-          <span
-            className="inline-block text-5xl md:text-7xl font-bold px-3 py-1 mb-1"
-            style={{ background: "#F97316", color: "#000000" }}
-          >
-            Inovasi Digital
-          </span>
-          <span className="block text-5xl md:text-7xl" style={{ color: "#1D4ED8" }}>
-            FISHA
-          </span>
-        </h1>
+        {/* Logo banner */}
+        <div className="mb-6">
+          <img
+            src="/fisha-logo.png"
+            alt="Inovasi Digital FISHA"
+            className="h-32 md:h-44 w-auto object-contain"
+            style={{ maxWidth: "480px" }}
+          />
+        </div>
 
         <p className="text-gray-500 text-base md:text-lg max-w-xl leading-relaxed mb-10">
           Koleksi inovasi digital yang dibangunkan untuk transformasi sistem
