@@ -12,12 +12,17 @@ type Testimonial = {
 
 function StarDisplay({ rating }: { rating: number }) {
   return (
-    <span className="flex gap-0.5">
-      {[1, 2, 3, 4, 5].map((s) => (
-        <span key={s} className="text-lg leading-none" style={{ color: s <= rating ? "#F59E0B" : "#D1D5DB" }}>
-          ★
-        </span>
-      ))}
+    <span className="flex items-center gap-1.5">
+      <span className="flex gap-0.5">
+        {[1, 2, 3, 4, 5].map((s) => (
+          <span key={s} className="text-lg leading-none" style={{ color: s <= rating ? "#F59E0B" : "#D1D5DB" }}>
+            ★
+          </span>
+        ))}
+      </span>
+      <span className="text-xs font-semibold" style={{ color: "#F59E0B" }}>
+        {rating} daripada 5 bintang
+      </span>
     </span>
   );
 }

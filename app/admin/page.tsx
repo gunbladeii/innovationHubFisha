@@ -232,6 +232,34 @@ export default function AdminPage() {
     }
   };
 
+  const editRespon = async (id: string, fields: { nama: string; email: string; mesej: string; rating?: number | null }) => {
+    const res = await fetch("/api/respon", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${ADMIN_PASSWORD}`,
+      },
+      body: JSON.stringify({ id, ...fields }),
+    });
+    if (res.ok) {
+      const updated = await res.json() as ResponItem;
+      setRespon((prev) => prev.map((r) => r.id === id ? { ...r, ...updated } : r));
+    }
+  };
+
+  const deleteRespon = async (id: string) => {
+    if (!confirm("Padam rekod ini secara kekal?")) return;
+    const res = await fetch("/api/respon", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${ADMIN_PASSWORD}`,
+      },
+      body: JSON.stringify({ id }),
+    });
+    if (res.ok) setRespon((prev) => prev.filter((r) => r.id !== id));
+  };
+
   if (locked) return <PasswordGate onUnlock={() => setLocked(false)} />;
 
   const openEdit = (item: InovasiItem) => { setEditing({ ...item }); setOrigSlug(item.slug); setIsNew(false); };
@@ -511,6 +539,8 @@ export default function AdminPage() {
             filter={responFilter}
             onFilterChange={setResponFilter}
             onStatusChange={updateResponStatus}
+            onEdit={editRespon}
+            onDelete={deleteRespon}
           />
         )}
       </main>
@@ -543,14 +573,40 @@ function ResponPanel({
   filter,
   onFilterChange,
   onStatusChange,
+  onEdit,
+  onDelete,
 }: {
   items: ResponItem[];
   loading: boolean;
   filter: "semua" | "cadangan" | "permohonan" | "maklumbalas";
   onFilterChange: (f: "semua" | "cadangan" | "permohonan" | "maklumbalas") => void;
   onStatusChange: (id: string, status: ResponItem["status"]) => void;
+  onEdit: (id: string, fields: { nama: string; email: string; mesej: string; rating?: number | null }) => Promise<void>;
+  onDelete: (id: string) => void;
 }) {
   const [expanded, setExpanded] = useState<string | null>(null);
+  const [editId, setEditId] = useState<string | null>(null);
+  const [editForm, setEditForm] = useState({ nama: "", email: "", mesej: "", rating: 5 });
+  const [saving, setSaving] = useState(false);
+
+  const openEdit = (item: ResponItem, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setEditId(item.id);
+    setEditForm({ nama: item.nama, email: item.email, mesej: item.mesej, rating: item.rating ?? 5 });
+    setExpanded(item.id);
+  };
+
+  const saveEdit = async (item: ResponItem) => {
+    setSaving(true);
+    await onEdit(item.id, {
+      nama: editForm.nama,
+      email: editForm.email,
+      mesej: editForm.mesej,
+      rating: item.jenis === "maklumbalas" ? editForm.rating : undefined,
+    });
+    setSaving(false);
+    setEditId(null);
+  };
 
   const counts = {
     cadangan: items.filter((r) => r.jenis === "cadangan").length,
@@ -691,49 +747,137 @@ function ResponPanel({
                   {isOpen && (
                     <div className="px-5 pb-5 pt-1 ml-12">
                       <div className="rounded-xl p-4 space-y-3" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
-                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
-                          <div>
-                            <span className="text-gray-600 block mb-0.5">E-mel</span>
-                            <span className="text-gray-300 font-medium">{item.email}</span>
-                          </div>
-                          {item.jawatan && (
-                            <div>
-                              <span className="text-gray-600 block mb-0.5">Jawatan</span>
-                              <span className="text-gray-300 font-medium">{item.jawatan}</span>
+
+                        {editId === item.id ? (
+                          /* ── Inline edit form ── */
+                          <div className="space-y-3">
+                            <p className="text-xs font-semibold uppercase tracking-wide" style={{ color: "#60A5FA" }}>Edit Rekod</p>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                              <div>
+                                <label className="text-xs text-gray-500 block mb-1">Nama</label>
+                                <input
+                                  value={editForm.nama}
+                                  onChange={(e) => setEditForm((p) => ({ ...p, nama: e.target.value }))}
+                                  className="w-full rounded-lg px-3 py-2 text-sm text-white"
+                                  style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", outline: "none" }}
+                                />
+                              </div>
+                              <div>
+                                <label className="text-xs text-gray-500 block mb-1">E-mel</label>
+                                <input
+                                  value={editForm.email}
+                                  onChange={(e) => setEditForm((p) => ({ ...p, email: e.target.value }))}
+                                  className="w-full rounded-lg px-3 py-2 text-sm text-white"
+                                  style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", outline: "none" }}
+                                />
+                              </div>
                             </div>
-                          )}
-                          {item.unit && (
                             <div>
-                              <span className="text-gray-600 block mb-0.5">Unit / Sekolah</span>
-                              <span className="text-gray-300 font-medium">{item.unit}</span>
+                              <label className="text-xs text-gray-500 block mb-1">Huraian</label>
+                              <textarea
+                                rows={3}
+                                value={editForm.mesej}
+                                onChange={(e) => setEditForm((p) => ({ ...p, mesej: e.target.value }))}
+                                className="w-full rounded-lg px-3 py-2 text-sm text-white resize-none"
+                                style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", outline: "none" }}
+                              />
                             </div>
-                          )}
-                        </div>
-                        <div>
-                          <span className="text-xs text-gray-600 block mb-1">Huraian</span>
-                          <p className="text-sm text-gray-300 leading-relaxed whitespace-pre-wrap">{item.mesej}</p>
-                        </div>
-                        {/* Status update */}
-                        <div className="flex items-center gap-2 pt-1 flex-wrap">
-                          <span className="text-xs text-gray-600">Kemaskini status:</span>
-                          {(["baharu", "dalam-semakan", "selesai"] as const).map((s) => {
-                            const sc = STATUS_RESPON_CONFIG[s];
-                            return (
+                            {item.jenis === "maklumbalas" && (
+                              <div>
+                                <label className="text-xs text-gray-500 block mb-1">Rating</label>
+                                <div className="flex items-center gap-1">
+                                  {[1,2,3,4,5].map((s) => (
+                                    <button key={s} type="button" onClick={() => setEditForm((p) => ({ ...p, rating: s }))}
+                                      className="text-2xl transition-transform hover:scale-110"
+                                      style={{ color: s <= editForm.rating ? "#F59E0B" : "#374151", lineHeight: 1 }}>★</button>
+                                  ))}
+                                  <span className="ml-2 text-xs text-gray-400">{editForm.rating}/5</span>
+                                </div>
+                              </div>
+                            )}
+                            <div className="flex items-center gap-2 pt-1">
                               <button
-                                key={s}
-                                onClick={(e) => { e.stopPropagation(); onStatusChange(item.id, s); }}
-                                className="px-3 py-1 rounded-lg text-xs font-medium transition-all"
-                                style={{
-                                  background: item.status === s ? sc.bg : "transparent",
-                                  color: item.status === s ? sc.color : "#6B6B80",
-                                  border: `1px solid ${item.status === s ? sc.color + "55" : "rgba(255,255,255,0.08)"}`,
-                                }}
+                                onClick={() => saveEdit(item)}
+                                disabled={saving}
+                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all"
+                                style={{ background: "rgba(59,130,246,0.2)", color: "#60A5FA", border: "1px solid rgba(59,130,246,0.3)" }}
                               >
-                                {sc.label}
+                                <Save size={12} />{saving ? "Menyimpan..." : "Simpan"}
                               </button>
-                            );
-                          })}
-                        </div>
+                              <button
+                                onClick={() => setEditId(null)}
+                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
+                                style={{ background: "transparent", color: "#6B6B80", border: "1px solid rgba(255,255,255,0.08)" }}
+                              >
+                                <X size={12} />Batal
+                              </button>
+                            </div>
+                          </div>
+                        ) : (
+                          /* ── Read-only detail ── */
+                          <>
+                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
+                              <div>
+                                <span className="text-gray-600 block mb-0.5">E-mel</span>
+                                <span className="text-gray-300 font-medium">{item.email}</span>
+                              </div>
+                              {item.jawatan && (
+                                <div>
+                                  <span className="text-gray-600 block mb-0.5">Jawatan</span>
+                                  <span className="text-gray-300 font-medium">{item.jawatan}</span>
+                                </div>
+                              )}
+                              {item.unit && (
+                                <div>
+                                  <span className="text-gray-600 block mb-0.5">Unit / Sekolah</span>
+                                  <span className="text-gray-300 font-medium">{item.unit}</span>
+                                </div>
+                              )}
+                            </div>
+                            <div>
+                              <span className="text-xs text-gray-600 block mb-1">Huraian</span>
+                              <p className="text-sm text-gray-300 leading-relaxed whitespace-pre-wrap">{item.mesej}</p>
+                            </div>
+                            {/* Status update */}
+                            <div className="flex items-center gap-2 pt-1 flex-wrap">
+                              <span className="text-xs text-gray-600">Kemaskini status:</span>
+                              {(["baharu", "dalam-semakan", "selesai"] as const).map((s) => {
+                                const sc = STATUS_RESPON_CONFIG[s];
+                                return (
+                                  <button
+                                    key={s}
+                                    onClick={(e) => { e.stopPropagation(); onStatusChange(item.id, s); }}
+                                    className="px-3 py-1 rounded-lg text-xs font-medium transition-all"
+                                    style={{
+                                      background: item.status === s ? sc.bg : "transparent",
+                                      color: item.status === s ? sc.color : "#6B6B80",
+                                      border: `1px solid ${item.status === s ? sc.color + "55" : "rgba(255,255,255,0.08)"}`,
+                                    }}
+                                  >
+                                    {sc.label}
+                                  </button>
+                                );
+                              })}
+                            </div>
+                            {/* Edit / Delete actions */}
+                            <div className="flex items-center gap-2 pt-2" style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}>
+                              <button
+                                onClick={(e) => openEdit(item, e)}
+                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
+                                style={{ background: "rgba(59,130,246,0.1)", color: "#60A5FA", border: "1px solid rgba(59,130,246,0.2)" }}
+                              >
+                                <Pencil size={11} />Edit
+                              </button>
+                              <button
+                                onClick={(e) => { e.stopPropagation(); onDelete(item.id); }}
+                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
+                                style={{ background: "rgba(239,68,68,0.08)", color: "#F87171", border: "1px solid rgba(239,68,68,0.2)" }}
+                              >
+                                <Trash2 size={11} />Padam
+                              </button>
+                            </div>
+                          </>
+                        )}
                       </div>
                     </div>
                   )}

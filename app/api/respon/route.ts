@@ -54,3 +54,49 @@ export async function PATCH(req: NextRequest) {
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json(data);
 }
+
+// PUT — edit respon content (nama, email, mesej, rating)
+export async function PUT(req: NextRequest) {
+  if (!isAuthorized(req)) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const body = await req.json() as { id: string; nama?: string; email?: string; mesej?: string; rating?: number | null };
+  if (!body.id) {
+    return NextResponse.json({ error: "id required" }, { status: 400 });
+  }
+
+  // Build update object with only allowed fields
+  const update: Record<string, unknown> = {};
+  if (body.nama !== undefined) update.nama = body.nama;
+  if (body.email !== undefined) update.email = body.email;
+  if (body.mesej !== undefined) update.mesej = body.mesej;
+  if (body.rating !== undefined) update.rating = body.rating;
+
+  const supabase = getServiceClient();
+  const { data, error } = await supabase
+    .from("respon_awam")
+    .update(update)
+    .eq("id", body.id)
+    .select()
+    .single();
+
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  return NextResponse.json(data);
+}
+
+// DELETE — remove a respon record
+export async function DELETE(req: NextRequest) {
+  if (!isAuthorized(req)) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const { id } = await req.json() as { id: string };
+  if (!id) return NextResponse.json({ error: "id required" }, { status: 400 });
+
+  const supabase = getServiceClient();
+  const { error } = await supabase.from("respon_awam").delete().eq("id", id);
+
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  return NextResponse.json({ success: true });
+}
