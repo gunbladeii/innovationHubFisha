@@ -44,6 +44,7 @@ type ResponItem = {
   keutamaan: "rendah" | "sederhana" | "tinggi";
   mesej: string;
   status: "baharu" | "dalam-semakan" | "selesai";
+  rating?: number | null;
 };
 
 const defaultItem: InovasiItem = {
@@ -662,7 +663,16 @@ function ResponPanel({
                         <span className="text-xs" style={{ color: "#6B6B80" }}>
                           {new Date(item.created_at).toLocaleDateString("ms-MY", { day: "2-digit", month: "short", year: "numeric" })}
                         </span>
-                        <span className="text-xs font-medium" style={{ color: keutamaanCfg.color }}>● {keutamaanCfg.label}</span>
+                        {item.jenis === "maklumbalas" && item.rating ? (
+                          <span className="flex items-center gap-0.5 text-xs font-medium" style={{ color: "#F59E0B" }}>
+                            {[1,2,3,4,5].map((s) => (
+                              <span key={s} style={{ color: s <= item.rating! ? "#F59E0B" : "#374151" }}>★</span>
+                            ))}
+                            <span className="ml-1" style={{ color: "#6B6B80" }}>{item.rating}/5</span>
+                          </span>
+                        ) : (
+                          <span className="text-xs font-medium" style={{ color: keutamaanCfg.color }}>● {keutamaanCfg.label}</span>
+                        )}
                         <span className="px-2 py-0.5 rounded-full text-xs font-medium flex items-center gap-1"
                           style={{ background: statusCfg.bg, color: statusCfg.color }}>
                           {statusCfg.icon}{statusCfg.label}

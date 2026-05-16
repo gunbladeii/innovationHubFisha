@@ -38,6 +38,7 @@ interface FormData {
   email: string;
   mesej: string;
   keutamaan: "rendah" | "sederhana" | "tinggi";
+  rating: number; // 1–5, used for maklumbalas only
 }
 
 const DEFAULT_FORM: FormData = {
@@ -48,6 +49,7 @@ const DEFAULT_FORM: FormData = {
   email: "",
   mesej: "",
   keutamaan: "sederhana",
+  rating: 5,
 };
 
 export default function ResponAwam() {
@@ -55,22 +57,28 @@ export default function ResponAwam() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const set = (field: keyof FormData, value: string) =>
+  const set = (field: keyof FormData, value: string | number) =>
     setForm((prev) => ({ ...prev, [field]: value }));
+
+  // derive keutamaan from rating for maklumbalas
+  const resolvedKeutamaan = (r: number): "rendah" | "sederhana" | "tinggi" =>
+    r <= 2 ? "rendah" : r === 3 ? "sederhana" : "tinggi";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.nama || !form.email || !form.mesej) return;
     setLoading(true);
     try {
+      const isMaklumbalas = form.jenis === "maklumbalas";
       const { error } = await supabase.from("respon_awam").insert({
         jenis: form.jenis,
         nama: form.nama,
-        jawatan: form.jawatan || null,
-        unit: form.unit || null,
+        jawatan: isMaklumbalas ? null : form.jawatan || null,
+        unit: isMaklumbalas ? null : form.unit || null,
         email: form.email,
-        keutamaan: form.keutamaan,
+        keutamaan: isMaklumbalas ? resolvedKeutamaan(form.rating) : form.keutamaan,
         mesej: form.mesej,
+        rating: isMaklumbalas ? form.rating : null,
       });
       if (error) throw error;
       setSubmitted(true);
@@ -252,41 +260,45 @@ export default function ResponAwam() {
                       }}
                     />
                   </div>
-                  <div>
-                    <label className="text-xs font-semibold text-gray-500 block mb-1">Jawatan</label>
-                    <input
-                      type="text"
-                      value={form.jawatan}
-                      onChange={(e) => set("jawatan", e.target.value)}
-                      placeholder="e.g. Guru Besar, PPD..."
-                      className="w-full px-3 py-2 rounded-xl text-sm outline-none transition-all"
-                      style={{
-                        background: "#F8FAFF",
-                        border: "1px solid rgba(59,130,246,0.2)",
-                        color: "#1E293B",
-                      }}
-                    />
-                  </div>
+                  {form.jenis !== "maklumbalas" && (
+                    <div>
+                      <label className="text-xs font-semibold text-gray-500 block mb-1">Jawatan</label>
+                      <input
+                        type="text"
+                        value={form.jawatan}
+                        onChange={(e) => set("jawatan", e.target.value)}
+                        placeholder="e.g. Guru Besar, PPD..."
+                        className="w-full px-3 py-2 rounded-xl text-sm outline-none transition-all"
+                        style={{
+                          background: "#F8FAFF",
+                          border: "1px solid rgba(59,130,246,0.2)",
+                          color: "#1E293B",
+                        }}
+                      />
+                    </div>
+                  )}
                 </div>
 
-                {/* Unit + Email */}
+                {/* Unit + Email (unit hidden for maklumbalas) */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="text-xs font-semibold text-gray-500 block mb-1">Unit / Sekolah</label>
-                    <input
-                      type="text"
-                      value={form.unit}
-                      onChange={(e) => set("unit", e.target.value)}
-                      placeholder="e.g. JPN Selangor, SK..."
-                      className="w-full px-3 py-2 rounded-xl text-sm outline-none transition-all"
-                      style={{
-                        background: "#F8FAFF",
-                        border: "1px solid rgba(59,130,246,0.2)",
-                        color: "#1E293B",
-                      }}
-                    />
-                  </div>
-                  <div>
+                  {form.jenis !== "maklumbalas" && (
+                    <div>
+                      <label className="text-xs font-semibold text-gray-500 block mb-1">Unit / Sekolah</label>
+                      <input
+                        type="text"
+                        value={form.unit}
+                        onChange={(e) => set("unit", e.target.value)}
+                        placeholder="e.g. JPN Selangor, SK..."
+                        className="w-full px-3 py-2 rounded-xl text-sm outline-none transition-all"
+                        style={{
+                          background: "#F8FAFF",
+                          border: "1px solid rgba(59,130,246,0.2)",
+                          color: "#1E293B",
+                        }}
+                      />
+                    </div>
+                  )}
+                  <div className={form.jenis === "maklumbalas" ? "sm:col-span-1" : ""}>
                     <label className="text-xs font-semibold text-gray-500 block mb-1">E-mel *</label>
                     <input
                       type="email"
@@ -304,30 +316,53 @@ export default function ResponAwam() {
                   </div>
                 </div>
 
-                {/* Keutamaan */}
-                <div>
-                  <label className="text-xs font-semibold text-gray-500 block mb-2">Keutamaan</label>
-                  <div className="flex gap-2">
-                    {(["rendah", "sederhana", "tinggi"] as const).map((k) => {
-                      const colors = { rendah: "#10B981", sederhana: "#F59E0B", tinggi: "#EF4444" };
-                      return (
+                {/* Keutamaan (for cadangan/permohonan) OR Star Rating (for maklumbalas) */}
+                {form.jenis === "maklumbalas" ? (
+                  <div>
+                    <label className="text-xs font-semibold text-gray-500 block mb-2">Penilaian Keseluruhan *</label>
+                    <div className="flex items-center gap-1">
+                      {[1, 2, 3, 4, 5].map((star) => (
                         <button
-                          key={k}
+                          key={star}
                           type="button"
-                          onClick={() => set("keutamaan", k)}
-                          className="flex-1 py-1.5 rounded-lg text-xs font-semibold capitalize transition-all"
-                          style={{
-                            background: form.keutamaan === k ? `${colors[k]}15` : "#F8FAFF",
-                            border: `1px solid ${form.keutamaan === k ? colors[k] : "rgba(59,130,246,0.15)"}`,
-                            color: form.keutamaan === k ? colors[k] : "#64748B",
-                          }}
+                          onClick={() => set("rating", star)}
+                          className="text-3xl transition-transform hover:scale-110 focus:outline-none"
+                          style={{ color: star <= form.rating ? "#F59E0B" : "#D1D5DB", lineHeight: 1 }}
+                          aria-label={`${star} bintang`}
                         >
-                          {k === "rendah" ? "🟢 Rendah" : k === "sederhana" ? "🟡 Sederhana" : "🔴 Tinggi"}
+                          ★
                         </button>
-                      );
-                    })}
+                      ))}
+                      <span className="ml-2 text-sm font-semibold" style={{ color: "#F59E0B" }}>
+                        {form.rating}/5
+                      </span>
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <div>
+                    <label className="text-xs font-semibold text-gray-500 block mb-2">Keutamaan</label>
+                    <div className="flex gap-2">
+                      {(["rendah", "sederhana", "tinggi"] as const).map((k) => {
+                        const colors = { rendah: "#10B981", sederhana: "#F59E0B", tinggi: "#EF4444" };
+                        return (
+                          <button
+                            key={k}
+                            type="button"
+                            onClick={() => set("keutamaan", k)}
+                            className="flex-1 py-1.5 rounded-lg text-xs font-semibold capitalize transition-all"
+                            style={{
+                              background: form.keutamaan === k ? `${colors[k]}15` : "#F8FAFF",
+                              border: `1px solid ${form.keutamaan === k ? colors[k] : "rgba(59,130,246,0.15)"}`,
+                              color: form.keutamaan === k ? colors[k] : "#64748B",
+                            }}
+                          >
+                            {k === "rendah" ? "🟢 Rendah" : k === "sederhana" ? "🟡 Sederhana" : "🔴 Tinggi"}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
 
                 {/* Mesej */}
                 <div>

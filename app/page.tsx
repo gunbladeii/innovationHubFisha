@@ -1,6 +1,7 @@
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import InovasiGrid from "@/components/InovasiGrid";
+import TestimonialSection from "@/components/TestimonialSection";
 import TentangSaya from "@/components/TentangSaya";
 import ResponAwam from "@/components/ResponAwam";
 import CVTemplate from "@/components/CVTemplate";
@@ -16,6 +17,7 @@ export default function HomePage() {
           <div id="inovasi">
             <InovasiGrid />
           </div>
+          <TestimonialSection />
           <TentangSaya />
           <ResponAwam />
         </main>
