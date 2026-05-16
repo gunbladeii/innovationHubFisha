@@ -14,7 +14,7 @@ export async function GET() {
     .gte("rating", 4)
     .order("rating", { ascending: false })
     .order("created_at", { ascending: false })
-    .limit(5);
+    .limit(6);
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
