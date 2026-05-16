@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase";
 
 type Testimonial = {
   id: string;
@@ -27,16 +26,10 @@ export default function TestimonialSection() {
   const [items, setItems] = useState<Testimonial[]>([]);
 
   useEffect(() => {
-    supabase
-      .from("respon_awam")
-      .select("id, nama, mesej, rating, created_at")
-      .eq("jenis", "maklumbalas")
-      .gte("rating", 4)
-      .order("rating", { ascending: false })
-      .order("created_at", { ascending: false })
-      .limit(5)
-      .then(({ data }) => {
-        if (data) setItems(data as Testimonial[]);
+    fetch("/api/testimonial")
+      .then((r) => r.json())
+      .then((data) => {
+        if (Array.isArray(data)) setItems(data);
       });
   }, []);
 
