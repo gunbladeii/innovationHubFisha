@@ -1,8 +1,29 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import PDFDownloadButton from "./PDFDownloadButton";
+
+/* ── Count-up hook ── */
+function useCountUp(target: number, duration = 1400) {
+  const [count, setCount] = useState(0);
+  const startRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (target === 0) { setCount(0); return; }
+    startRef.current = null;
+    const step = (ts: number) => {
+      if (!startRef.current) startRef.current = ts;
+      const progress = Math.min((ts - startRef.current) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+      setCount(Math.round(eased * target));
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }, [target, duration]);
+
+  return count;
+}
 
 const MARQUEE_ITEMS = [
   "Next.js 15", "React", "TypeScript", "Supabase", "Firebase",
@@ -12,18 +33,17 @@ const MARQUEE_ITEMS = [
 ];
 
 type Stats = {
-  total: string;
-  aktif: string;
+  total: number;
+  aktif: number;
   yearRange: string;
 };
 
 export default function HeroSection() {
   const doubled = [...MARQUEE_ITEMS, ...MARQUEE_ITEMS];
-  const [stats, setStats] = useState<Stats>({
-    total: "—",
-    aktif: "—",
-    yearRange: "...",
-  });
+  const [stats, setStats] = useState<Stats>({ total: 0, aktif: 0, yearRange: "..." });
+
+  const totalCount  = useCountUp(stats.total);
+  const aktifCount  = useCountUp(stats.aktif);
 
   useEffect(() => {
     supabase
@@ -36,11 +56,7 @@ export default function HeroSection() {
         const years = data.map((d) => d.tahun).filter(Boolean) as number[];
         const minYear = Math.min(...years);
         const maxYear = Math.max(...years);
-        setStats({
-          total: String(total),
-          aktif: String(aktif),
-          yearRange: `${minYear}–${maxYear}`,
-        });
+        setStats({ total, aktif, yearRange: `${minYear}–${maxYear}` });
       });
   }, []);
 
@@ -96,9 +112,9 @@ export default function HeroSection() {
         {/* Bento stat cards */}
         <div className="grid grid-cols-3 gap-3 max-w-md w-full mb-8 mx-auto">
           {[
-            { value: stats.total, label: "Sistem Dibangunkan", sub: stats.yearRange },
-            { value: stats.aktif, label: "Sistem Aktif", sub: "Dalam operasi" },
-            { value: "5+", label: "Tahun Inovasi", sub: "Berterusan" },
+            { value: totalCount, suffix: "", label: "Sistem Dibangunkan", sub: stats.yearRange },
+            { value: aktifCount, suffix: "", label: "Sistem Aktif", sub: "Dalam operasi" },
+            { value: 5, suffix: "+", label: "Tahun Inovasi", sub: "Berterusan" },
           ].map((s) => (
             <div
               key={s.label}
@@ -110,7 +126,7 @@ export default function HeroSection() {
               }}
             >
               <span className="text-2xl font-bold text-brand-700" style={{ fontFamily: "var(--font-space-grotesk)" }}>
-                {s.value}
+                {s.value}{s.suffix}
               </span>
               <span className="text-xs text-gray-700 font-medium leading-tight">{s.label}</span>
               <span className="text-xs text-gray-400">{s.sub}</span>

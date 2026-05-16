@@ -10,6 +10,35 @@ type Testimonial = {
   created_at: string;
 };
 
+/* ── Count-up hook ── */
+function useCountUp(target: number, duration = 1200) {
+  const [count, setCount] = useState(0);
+  const startRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (target === 0) { setCount(0); return; }
+    startRef.current = null;
+    const step = (ts: number) => {
+      if (!startRef.current) startRef.current = ts;
+      const progress = Math.min((ts - startRef.current) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setCount(Math.round(eased * target));
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }, [target, duration]);
+
+  return count;
+}
+
+type Testimonial = {
+  id: string;
+  nama: string;
+  mesej: string;
+  rating: number;
+  created_at: string;
+};
+
 function StarDisplay({ rating }: { rating: number }) {
   return (
     <span className="flex items-center gap-1.5">
@@ -31,6 +60,8 @@ export default function TestimonialSection() {
   const [items, setItems] = useState<Testimonial[]>([]);
   const [newIds, setNewIds] = useState<Set<string>>(new Set());
   const seenIds = useRef<Set<string>>(new Set());
+
+  const respondentCount = useCountUp(items.length, 1000);
 
   useEffect(() => {
     // Initial fetch
@@ -106,6 +137,21 @@ export default function TestimonialSection() {
           <p className="text-slate-500 text-base max-w-xl mx-auto">
             Maklum balas tulen daripada pengguna sistem inovasi FISHA.
           </p>
+          {/* Animated respondent counter */}
+          <div className="flex items-center justify-center gap-2 mt-5">
+            <div
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full"
+              style={{ background: "rgba(59,130,246,0.08)", border: "1px solid rgba(59,130,246,0.18)" }}
+            >
+              <span
+                className="text-xl font-bold"
+                style={{ fontFamily: "var(--font-space-grotesk)", color: "#1D4ED8", minWidth: "2ch", display: "inline-block", textAlign: "right" }}
+              >
+                {respondentCount}
+              </span>
+              <span className="text-sm font-medium text-slate-600">pengguna telah memberi maklum balas</span>
+            </div>
+          </div>
         </div>
 
         {/* Quote cards grid */}

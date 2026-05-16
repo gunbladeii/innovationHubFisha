@@ -42,7 +42,7 @@ interface FormData {
 }
 
 const DEFAULT_FORM: FormData = {
-  jenis: "cadangan",
+  jenis: "maklumbalas",
   nama: "",
   jawatan: "",
   unit: "",
