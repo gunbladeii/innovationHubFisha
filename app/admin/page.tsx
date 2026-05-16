@@ -15,6 +15,14 @@ import {
   X,
   Lock,
   ShieldCheck,
+  Bell,
+  Lightbulb,
+  FolderOpen,
+  MessageSquare,
+  Clock,
+  CheckCircle2,
+  ChevronDown,
+  LayoutList,
 } from "lucide-react";
 
 const ADMIN_PASSWORD = "FISHA2026-UD";
@@ -23,6 +31,19 @@ type InovasiItem = Omit<Inovasi, "created_at" | "updated_at"> & {
   id?: string;
   created_at?: string;
   updated_at?: string;
+};
+
+type ResponItem = {
+  id: string;
+  created_at: string;
+  jenis: "cadangan" | "permohonan" | "maklumbalas";
+  nama: string;
+  jawatan?: string | null;
+  unit?: string | null;
+  email: string;
+  keutamaan: "rendah" | "sederhana" | "tinggi";
+  mesej: string;
+  status: "baharu" | "dalam-semakan" | "selesai";
 };
 
 const defaultItem: InovasiItem = {
@@ -161,8 +182,12 @@ export default function AdminPage() {
   const [isNew, setIsNew] = useState(false);
   const [saved, setSaved] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [adminTab, setAdminTab] = useState<"inovasi" | "respon">("inovasi");
+  const [respon, setRespon] = useState<ResponItem[]>([]);
+  const [loadingRespon, setLoadingRespon] = useState(false);
+  const [responFilter, setResponFilter] = useState<"semua" | "cadangan" | "permohonan" | "maklumbalas">("semua");
 
-  // Fetch dari Supabase selepas unlock
+  // Fetch inovasi dari Supabase selepas unlock
   useEffect(() => {
     if (locked) return;
     setLoading(true);
@@ -176,6 +201,35 @@ export default function AdminPage() {
       })
       .catch(() => setLoading(false));
   }, [locked]);
+
+  // Fetch respon_awam apabila tab respon dibuka
+  useEffect(() => {
+    if (locked || adminTab !== "respon") return;
+    setLoadingRespon(true);
+    fetch("/api/respon", {
+      headers: { Authorization: `Bearer ${ADMIN_PASSWORD}` },
+    })
+      .then((r) => r.json())
+      .then((rows) => {
+        if (Array.isArray(rows)) setRespon(rows as ResponItem[]);
+        setLoadingRespon(false);
+      })
+      .catch(() => setLoadingRespon(false));
+  }, [locked, adminTab]);
+
+  const updateResponStatus = async (id: string, status: ResponItem["status"]) => {
+    const res = await fetch("/api/respon", {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${ADMIN_PASSWORD}`,
+      },
+      body: JSON.stringify({ id, status }),
+    });
+    if (res.ok) {
+      setRespon((prev) => prev.map((r) => r.id === id ? { ...r, status } : r));
+    }
+  };
 
   if (locked) return <PasswordGate onUnlock={() => setLocked(false)} />;
 
@@ -294,11 +348,39 @@ export default function AdminPage() {
               <ShieldCheck size={12} style={{ color: "#34D399" }} />
               <span className="text-xs font-medium" style={{ color: "#34D399" }}>Telah disahkan</span>
             </div>
-            <button onClick={openNew} className="btn-primary text-sm">
-              <Plus size={15} />
-              Tambah Inovasi
-            </button>
+            {adminTab === "inovasi" && (
+              <button onClick={openNew} className="btn-primary text-sm">
+                <Plus size={15} />
+                Tambah Inovasi
+              </button>
+            )}
           </div>
+        </div>
+
+        {/* Tab bar */}
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 flex gap-1 pb-0" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+          {[
+            { key: "inovasi", label: "Senarai Inovasi", icon: <LayoutList size={14} /> },
+            { key: "respon", label: "Respon Awam", icon: <Bell size={14} />, badge: respon.filter(r => r.status === "baharu").length },
+          ].map((tab) => (
+            <button
+              key={tab.key}
+              onClick={() => setAdminTab(tab.key as "inovasi" | "respon")}
+              className="flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium transition-colors relative"
+              style={{
+                color: adminTab === tab.key ? "#60A5FA" : "#6B6B80",
+                borderBottom: adminTab === tab.key ? "2px solid #3B82F6" : "2px solid transparent",
+              }}
+            >
+              {tab.icon}
+              {tab.label}
+              {tab.badge ? (
+                <span className="ml-1 px-1.5 py-0.5 rounded-full text-xs font-bold" style={{ background: "#EF4444", color: "#fff", fontSize: "10px" }}>
+                  {tab.badge}
+                </span>
+              ) : null}
+            </button>
+          ))}
         </div>
       </header>
 
@@ -313,118 +395,349 @@ export default function AdminPage() {
           </div>
         )}
 
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold text-white" style={{ fontFamily: "var(--font-space-grotesk)" }}>
-            Senarai Inovasi
-          </h1>
-          <p className="text-sm text-gray-600 mt-0.5">{loading ? "Memuatkan data..." : `${items.length} inovasi direkodkan`}</p>
-        </div>
+        {adminTab === "inovasi" ? (
+          <>
+            <div className="mb-6">
+              <h1 className="text-2xl font-bold text-white" style={{ fontFamily: "var(--font-space-grotesk)" }}>
+                Senarai Inovasi
+              </h1>
+              <p className="text-sm text-gray-600 mt-0.5">{loading ? "Memuatkan data..." : `${items.length} inovasi direkodkan`}</p>
+            </div>
 
-        {/* Table */}
-        <div className="rounded-2xl overflow-hidden" style={{ background: "#111116", border: "1px solid rgba(255,255,255,0.08)" }}>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr style={{ borderBottom: "1px solid rgba(255,255,255,0.06)", background: "rgba(255,255,255,0.02)" }}>
-                  {["SISTEM", "STATUS", "TAHUN", "TAGS", "PUBLISH", "TINDAKAN"].map((h) => (
-                    <th
-                      key={h}
-                      className={`px-5 py-3 text-xs font-semibold uppercase tracking-wide ${h === "TINDAKAN" ? "text-right" : h === "PUBLISH" ? "text-center" : "text-left"}`}
-                      style={{ color: "#6B6B80" }}
-                    >
-                      {h}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {items.map((item) => {
-                  const statusCfg = STATUS_CONFIG[item.status as keyof typeof STATUS_CONFIG];
-                  return (
-                    <tr
-                      key={item.slug}
-                      className="transition-colors"
-                      style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}
-                      onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.02)")}
-                      onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
-                    >
-                      <td className="px-5 py-3.5">
-                        <div className="flex items-center gap-3">
-                          <span className="text-xl">{item.ikon}</span>
-                          <div>
-                            <p className="font-semibold text-white">{item.nama}</p>
-                            <p className="text-xs font-mono" style={{ color: "#6B6B80" }}>{item.slug}</p>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-4 py-3.5">
-                        <span className={`tag-pill border ${statusCfg.color}`}>
-                          {statusCfg.label}
-                        </span>
-                      </td>
-                      <td className="px-4 py-3.5 text-gray-500">{item.tahun}</td>
-                      <td className="px-4 py-3.5">
-                        <div className="flex flex-wrap gap-1 max-w-xs">
-                          {item.tags.slice(0, 2).map((t) => (
-                            <span
-                              key={t}
-                              className="px-1.5 py-0.5 rounded text-xs"
-                              style={{ background: "rgba(255,255,255,0.06)", color: "#9CA3AF" }}
-                            >
-                              {t}
-                            </span>
-                          ))}
-                          {item.tags.length > 2 && (
-                            <span className="text-xs text-gray-600">+{item.tags.length - 2}</span>
-                          )}
-                        </div>
-                      </td>
-                      <td className="px-4 py-3.5 text-center">
-                        <button
-                          onClick={() => togglePublish(item.slug)}
-                          className="transition-colors"
-                          style={{ color: item.is_published ? "#34D399" : "#374151" }}
-                          title={item.is_published ? "Published" : "Hidden"}
+            {/* Table */}
+            <div className="rounded-2xl overflow-hidden" style={{ background: "#111116", border: "1px solid rgba(255,255,255,0.08)" }}>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr style={{ borderBottom: "1px solid rgba(255,255,255,0.06)", background: "rgba(255,255,255,0.02)" }}>
+                      {["SISTEM", "STATUS", "TAHUN", "TAGS", "PUBLISH", "TINDAKAN"].map((h) => (
+                        <th
+                          key={h}
+                          className={`px-5 py-3 text-xs font-semibold uppercase tracking-wide ${h === "TINDAKAN" ? "text-right" : h === "PUBLISH" ? "text-center" : "text-left"}`}
+                          style={{ color: "#6B6B80" }}
                         >
-                          {item.is_published ? <Eye size={16} /> : <EyeOff size={16} />}
-                        </button>
-                      </td>
-                      <td className="px-5 py-3.5">
-                        <div className="flex items-center justify-end gap-2">
-                          <button
-                            onClick={() => openEdit(item)}
-                            className="p-1.5 rounded-lg transition-all text-gray-600 hover:text-brand-400"
-                            style={{}}
-                            title="Edit"
-                          >
-                            <Pencil size={14} />
-                          </button>
-                          <button
-                            onClick={() => deleteItem(item.slug)}
-                            className="p-1.5 rounded-lg transition-all text-gray-600 hover:text-red-400"
-                            title="Padam"
-                          >
-                            <Trash2 size={14} />
-                          </button>
-                        </div>
-                      </td>
+                          {h}
+                        </th>
+                      ))}
                     </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        </div>
+                  </thead>
+                  <tbody>
+                    {items.map((item) => {
+                      const statusCfg = STATUS_CONFIG[item.status as keyof typeof STATUS_CONFIG];
+                      return (
+                        <tr
+                          key={item.slug}
+                          className="transition-colors"
+                          style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}
+                          onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.02)")}
+                          onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+                        >
+                          <td className="px-5 py-3.5">
+                            <div className="flex items-center gap-3">
+                              <span className="text-xl">{item.ikon}</span>
+                              <div>
+                                <p className="font-semibold text-white">{item.nama}</p>
+                                <p className="text-xs font-mono" style={{ color: "#6B6B80" }}>{item.slug}</p>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="px-4 py-3.5">
+                            <span className={`tag-pill border ${statusCfg.color}`}>
+                              {statusCfg.label}
+                            </span>
+                          </td>
+                          <td className="px-4 py-3.5 text-gray-500">{item.tahun}</td>
+                          <td className="px-4 py-3.5">
+                            <div className="flex flex-wrap gap-1 max-w-xs">
+                              {item.tags.slice(0, 2).map((t) => (
+                                <span
+                                  key={t}
+                                  className="px-1.5 py-0.5 rounded text-xs"
+                                  style={{ background: "rgba(255,255,255,0.06)", color: "#9CA3AF" }}
+                                >
+                                  {t}
+                                </span>
+                              ))}
+                              {item.tags.length > 2 && (
+                                <span className="text-xs text-gray-600">+{item.tags.length - 2}</span>
+                              )}
+                            </div>
+                          </td>
+                          <td className="px-4 py-3.5 text-center">
+                            <button
+                              onClick={() => togglePublish(item.slug)}
+                              className="transition-colors"
+                              style={{ color: item.is_published ? "#34D399" : "#374151" }}
+                              title={item.is_published ? "Published" : "Hidden"}
+                            >
+                              {item.is_published ? <Eye size={16} /> : <EyeOff size={16} />}
+                            </button>
+                          </td>
+                          <td className="px-5 py-3.5">
+                            <div className="flex items-center justify-end gap-2">
+                              <button
+                                onClick={() => openEdit(item)}
+                                className="p-1.5 rounded-lg transition-all text-gray-600 hover:text-brand-400"
+                                title="Edit"
+                              >
+                                <Pencil size={14} />
+                              </button>
+                              <button
+                                onClick={() => deleteItem(item.slug)}
+                                className="p-1.5 rounded-lg transition-all text-gray-600 hover:text-red-400"
+                                title="Padam"
+                              >
+                                <Trash2 size={14} />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
 
-        <p className="mt-4 text-xs text-center" style={{ color: "#3A3A4A" }}>
-          Data disimpan dalam Supabase — perubahan dipaparkan kepada semua pengguna secara langsung.
-        </p>
+            <p className="mt-4 text-xs text-center" style={{ color: "#3A3A4A" }}>
+              Data disimpan dalam Supabase — perubahan dipaparkan kepada semua pengguna secara langsung.
+            </p>
+          </>
+        ) : (
+          <ResponPanel
+            items={respon}
+            loading={loadingRespon}
+            filter={responFilter}
+            onFilterChange={setResponFilter}
+            onStatusChange={updateResponStatus}
+          />
+        )}
       </main>
     </div>
   );
 }
 
-/* â”€â”€â”€ Edit Form â”€â”€â”€ */
+/* ─── Respon Panel ─── */
+const KATEGORI_CONFIG = {
+  cadangan: { label: "Cadangan Inovasi", icon: <Lightbulb size={16} />, color: "#F59E0B", bg: "rgba(245,158,11,0.1)", border: "rgba(245,158,11,0.25)" },
+  permohonan: { label: "Permohonan Projek", icon: <FolderOpen size={16} />, color: "#3B82F6", bg: "rgba(59,130,246,0.1)", border: "rgba(59,130,246,0.25)" },
+  maklumbalas: { label: "Maklum Balas", icon: <MessageSquare size={16} />, color: "#10B981", bg: "rgba(16,185,129,0.1)", border: "rgba(16,185,129,0.25)" },
+};
+
+const STATUS_RESPON_CONFIG = {
+  baharu: { label: "Baharu", color: "#EF4444", bg: "rgba(239,68,68,0.12)", icon: <Bell size={11} /> },
+  "dalam-semakan": { label: "Dalam Semakan", color: "#F59E0B", bg: "rgba(245,158,11,0.12)", icon: <Clock size={11} /> },
+  selesai: { label: "Selesai", color: "#34D399", bg: "rgba(52,211,153,0.12)", icon: <CheckCircle2 size={11} /> },
+};
+
+const KEUTAMAAN_CONFIG = {
+  rendah: { label: "Rendah", color: "#6B7280" },
+  sederhana: { label: "Sederhana", color: "#F59E0B" },
+  tinggi: { label: "Tinggi", color: "#EF4444" },
+};
+
+function ResponPanel({
+  items,
+  loading,
+  filter,
+  onFilterChange,
+  onStatusChange,
+}: {
+  items: ResponItem[];
+  loading: boolean;
+  filter: "semua" | "cadangan" | "permohonan" | "maklumbalas";
+  onFilterChange: (f: "semua" | "cadangan" | "permohonan" | "maklumbalas") => void;
+  onStatusChange: (id: string, status: ResponItem["status"]) => void;
+}) {
+  const [expanded, setExpanded] = useState<string | null>(null);
+
+  const counts = {
+    cadangan: items.filter((r) => r.jenis === "cadangan").length,
+    permohonan: items.filter((r) => r.jenis === "permohonan").length,
+    maklumbalas: items.filter((r) => r.jenis === "maklumbalas").length,
+    baharu: items.filter((r) => r.status === "baharu").length,
+  };
+
+  const filtered = filter === "semua" ? items : items.filter((r) => r.jenis === filter);
+
+  return (
+    <div>
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold text-white" style={{ fontFamily: "var(--font-space-grotesk)" }}>
+          Respon Awam
+        </h1>
+        <p className="text-sm text-gray-600 mt-0.5">
+          {loading ? "Memuatkan data..." : `${items.length} submission diterima · ${counts.baharu} belum ditangani`}
+        </p>
+      </div>
+
+      {/* Category summary cards */}
+      <div className="grid grid-cols-3 gap-3 mb-6">
+        {(["cadangan", "permohonan", "maklumbalas"] as const).map((k) => {
+          const cfg = KATEGORI_CONFIG[k];
+          return (
+            <button
+              key={k}
+              onClick={() => onFilterChange(filter === k ? "semua" : k)}
+              className="rounded-2xl p-4 text-left transition-all"
+              style={{
+                background: filter === k ? cfg.bg : "#111116",
+                border: `1px solid ${filter === k ? cfg.border : "rgba(255,255,255,0.08)"}`,
+                outline: filter === k ? `2px solid ${cfg.color}33` : "none",
+              }}
+            >
+              <div className="flex items-center gap-2 mb-2" style={{ color: cfg.color }}>
+                {cfg.icon}
+                <span className="text-xs font-semibold uppercase tracking-wide">{cfg.label}</span>
+              </div>
+              <p className="text-3xl font-bold text-white" style={{ fontFamily: "var(--font-space-grotesk)" }}>
+                {counts[k]}
+              </p>
+              <p className="text-xs mt-0.5" style={{ color: "#6B6B80" }}>
+                {items.filter((r) => r.jenis === k && r.status === "baharu").length} baharu
+              </p>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Table */}
+      <div className="rounded-2xl overflow-hidden" style={{ background: "#111116", border: "1px solid rgba(255,255,255,0.08)" }}>
+        {/* Filter strip */}
+        <div className="flex items-center gap-2 px-5 py-3 flex-wrap" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)", background: "rgba(255,255,255,0.02)" }}>
+          <span className="text-xs font-semibold uppercase tracking-wide" style={{ color: "#6B6B80" }}>Tapis:</span>
+          {(["semua", "cadangan", "permohonan", "maklumbalas"] as const).map((f) => (
+            <button
+              key={f}
+              onClick={() => onFilterChange(f)}
+              className="px-3 py-1 rounded-lg text-xs font-medium transition-colors"
+              style={{
+                background: filter === f ? "rgba(59,130,246,0.15)" : "transparent",
+                color: filter === f ? "#60A5FA" : "#6B6B80",
+                border: `1px solid ${filter === f ? "rgba(59,130,246,0.3)" : "transparent"}`,
+              }}
+            >
+              {f === "semua" ? "Semua" : KATEGORI_CONFIG[f].label}
+            </button>
+          ))}
+        </div>
+
+        {loading ? (
+          <div className="py-16 text-center text-sm text-gray-600">Memuatkan...</div>
+        ) : filtered.length === 0 ? (
+          <div className="py-16 text-center text-sm text-gray-600">Tiada submission lagi.</div>
+        ) : (
+          <div className="divide-y" style={{ borderColor: "rgba(255,255,255,0.04)" }}>
+            {filtered.map((item) => {
+              const kategoriCfg = KATEGORI_CONFIG[item.jenis];
+              const statusCfg = STATUS_RESPON_CONFIG[item.status];
+              const keutamaanCfg = KEUTAMAAN_CONFIG[item.keutamaan];
+              const isOpen = expanded === item.id;
+              return (
+                <div key={item.id}>
+                  <div
+                    className="flex items-start gap-4 px-5 py-4 cursor-pointer transition-colors"
+                    style={{ background: isOpen ? "rgba(255,255,255,0.02)" : "transparent" }}
+                    onClick={() => setExpanded(isOpen ? null : item.id)}
+                    onMouseEnter={(e) => { if (!isOpen) (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.015)"; }}
+                    onMouseLeave={(e) => { if (!isOpen) (e.currentTarget as HTMLElement).style.background = "transparent"; }}
+                  >
+                    {/* Kategori icon */}
+                    <div
+                      className="w-8 h-8 rounded-lg flex-shrink-0 flex items-center justify-center mt-0.5"
+                      style={{ background: kategoriCfg.bg, color: kategoriCfg.color, border: `1px solid ${kategoriCfg.border}` }}
+                    >
+                      {kategoriCfg.icon}
+                    </div>
+
+                    {/* Info */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="font-semibold text-white text-sm">{item.nama}</span>
+                        {item.jawatan && <span className="text-xs text-gray-500">· {item.jawatan}</span>}
+                        {item.unit && <span className="text-xs text-gray-500">· {item.unit}</span>}
+                      </div>
+                      <p className="text-xs mt-0.5 truncate" style={{ color: "#6B6B80" }}>{item.mesej}</p>
+                      <div className="flex items-center gap-3 mt-1.5 flex-wrap">
+                        <span className="text-xs" style={{ color: "#6B6B80" }}>
+                          {new Date(item.created_at).toLocaleDateString("ms-MY", { day: "2-digit", month: "short", year: "numeric" })}
+                        </span>
+                        <span className="text-xs font-medium" style={{ color: keutamaanCfg.color }}>● {keutamaanCfg.label}</span>
+                        <span className="px-2 py-0.5 rounded-full text-xs font-medium flex items-center gap-1"
+                          style={{ background: statusCfg.bg, color: statusCfg.color }}>
+                          {statusCfg.icon}{statusCfg.label}
+                        </span>
+                      </div>
+                    </div>
+
+                    <ChevronDown
+                      size={15}
+                      className="flex-shrink-0 mt-1 transition-transform"
+                      style={{ color: "#6B6B80", transform: isOpen ? "rotate(180deg)" : "rotate(0deg)" }}
+                    />
+                  </div>
+
+                  {/* Expanded detail */}
+                  {isOpen && (
+                    <div className="px-5 pb-5 pt-1 ml-12">
+                      <div className="rounded-xl p-4 space-y-3" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
+                          <div>
+                            <span className="text-gray-600 block mb-0.5">E-mel</span>
+                            <span className="text-gray-300 font-medium">{item.email}</span>
+                          </div>
+                          {item.jawatan && (
+                            <div>
+                              <span className="text-gray-600 block mb-0.5">Jawatan</span>
+                              <span className="text-gray-300 font-medium">{item.jawatan}</span>
+                            </div>
+                          )}
+                          {item.unit && (
+                            <div>
+                              <span className="text-gray-600 block mb-0.5">Unit / Sekolah</span>
+                              <span className="text-gray-300 font-medium">{item.unit}</span>
+                            </div>
+                          )}
+                        </div>
+                        <div>
+                          <span className="text-xs text-gray-600 block mb-1">Huraian</span>
+                          <p className="text-sm text-gray-300 leading-relaxed whitespace-pre-wrap">{item.mesej}</p>
+                        </div>
+                        {/* Status update */}
+                        <div className="flex items-center gap-2 pt-1 flex-wrap">
+                          <span className="text-xs text-gray-600">Kemaskini status:</span>
+                          {(["baharu", "dalam-semakan", "selesai"] as const).map((s) => {
+                            const sc = STATUS_RESPON_CONFIG[s];
+                            return (
+                              <button
+                                key={s}
+                                onClick={(e) => { e.stopPropagation(); onStatusChange(item.id, s); }}
+                                className="px-3 py-1 rounded-lg text-xs font-medium transition-all"
+                                style={{
+                                  background: item.status === s ? sc.bg : "transparent",
+                                  color: item.status === s ? sc.color : "#6B6B80",
+                                  border: `1px solid ${item.status === s ? sc.color + "55" : "rgba(255,255,255,0.08)"}`,
+                                }}
+                              >
+                                {sc.label}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* ─── Edit Form ─── */
 function EditForm({
   item,
   isNew,
