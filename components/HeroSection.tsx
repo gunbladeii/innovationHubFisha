@@ -26,10 +26,24 @@ function useCountUp(target: number, duration = 1400) {
 }
 
 const MARQUEE_ITEMS = [
-  "Next.js 15", "React", "TypeScript", "Supabase", "Firebase",
-  "Laravel", "PHP", "Python", "Google Apps Script", "Tailwind CSS",
-  "MySQL", "PostgreSQL", "Vercel", "Node.js", "Vite", "Gemini AI",
-  "Chart.js", "Google Workspace",
+  { name: "Next.js",            slug: "nextdotjs",         color: "000000" },
+  { name: "React",              slug: "react",             color: "61DAFB" },
+  { name: "TypeScript",         slug: "typescript",        color: "3178C6" },
+  { name: "Supabase",           slug: "supabase",          color: "3ECF8E" },
+  { name: "Firebase",           slug: "firebase",          color: "FFCA28" },
+  { name: "Laravel",            slug: "laravel",           color: "FF2D20" },
+  { name: "PHP",                slug: "php",               color: "777BB4" },
+  { name: "Python",             slug: "python",            color: "3776AB" },
+  { name: "Google Apps Script", slug: "googleappsscript",  color: "34A853" },
+  { name: "Tailwind CSS",       slug: "tailwindcss",       color: "06B6D4" },
+  { name: "MySQL",              slug: "mysql",             color: "4479A1" },
+  { name: "PostgreSQL",         slug: "postgresql",        color: "4169E1" },
+  { name: "Vercel",             slug: "vercel",            color: "000000" },
+  { name: "Node.js",            slug: "nodedotjs",         color: "339933" },
+  { name: "Vite",               slug: "vite",              color: "646CFF" },
+  { name: "Gemini AI",          slug: "googlegemini",      color: "8E75B2" },
+  { name: "Chart.js",           slug: "chartdotjs",        color: "FF6384" },
+  { name: "Google Workspace",   slug: "googleworkspace",   color: "4285F4" },
 ];
 
 type Stats = {
@@ -162,14 +176,23 @@ export default function HeroSection() {
       >
         <div className="flex w-max animate-marquee">
           {doubled.map((item, i) => (
-            <span
+            <div
               key={i}
-              className="flex items-center gap-4 px-4 text-sm font-medium whitespace-nowrap"
-              style={{ color: "#64748B" }}
+              className="flex items-center gap-6 px-4 whitespace-nowrap"
             >
-              {item}
+              {/* Product logo */}
+              <div className="flex flex-col items-center gap-1" title={item.name}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={`https://cdn.simpleicons.org/${item.slug}/${item.color}`}
+                  alt={item.name}
+                  width={28}
+                  height={28}
+                  style={{ width: 28, height: 28, objectFit: "contain" }}
+                />
+              </div>
               <span className="w-1 h-1 rounded-full flex-shrink-0" style={{ background: "#93C5FD" }} />
-            </span>
+            </div>
           ))}
         </div>
       </div>
