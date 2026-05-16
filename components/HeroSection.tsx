@@ -69,7 +69,7 @@ export default function HeroSection() {
       />
 
       {/* Main content */}
-      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 pt-20 pb-10 md:pt-28 md:pb-12">
+      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 pt-20 pb-10 md:pt-28 md:pb-12 flex flex-col items-center text-center">
         {/* Badge pill */}
         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border mb-8"
           style={{ borderColor: "rgba(59,130,246,0.25)", background: "rgba(59,130,246,0.07)" }}>
@@ -80,12 +80,11 @@ export default function HeroSection() {
         </div>
 
         {/* Logo banner */}
-        <div className="mb-6">
+        <div className="flex justify-center items-center mb-8 w-full">
           <img
             src="/fisha-logo.png"
             alt="Inovasi Digital FISHA"
-            className="h-32 md:h-44 w-auto object-contain"
-            style={{ maxWidth: "480px" }}
+            className="w-[320px] sm:w-[420px] md:w-[540px] lg:w-[620px] h-auto object-contain"
           />
         </div>
 
@@ -95,7 +94,7 @@ export default function HeroSection() {
         </p>
 
         {/* Bento stat cards */}
-        <div className="grid grid-cols-3 gap-3 max-w-md mb-8">
+        <div className="grid grid-cols-3 gap-3 max-w-md w-full mb-8 mx-auto">
           {[
             { value: stats.total, label: "Sistem Dibangunkan", sub: stats.yearRange },
             { value: stats.aktif, label: "Sistem Aktif", sub: "Dalam operasi" },
@@ -120,7 +119,7 @@ export default function HeroSection() {
         </div>
 
         {/* CTA row */}
-        <div className="flex items-center gap-3 flex-wrap">
+        <div className="flex items-center justify-center gap-3 flex-wrap">
           <PDFDownloadButton variant="hero" />
           <a
             href="#inovasi"
