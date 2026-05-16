@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Send, CheckCircle, MessageSquare, Lightbulb, FolderOpen } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
@@ -95,6 +95,19 @@ export default function ResponAwam() {
     setForm(DEFAULT_FORM);
     setSubmitted(false);
   };
+
+  // Listen for external trigger (floating button)
+  useEffect(() => {
+    const handler = () => {
+      setForm((prev) => ({ ...prev, jenis: "maklumbalas" }));
+      setSubmitted(false);
+      setTimeout(() => {
+        document.getElementById("star-rating")?.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 80);
+    };
+    window.addEventListener("open-maklumbalas", handler);
+    return () => window.removeEventListener("open-maklumbalas", handler);
+  }, []);
 
   const selectedJenis = JENIS_OPTIONS.find((o) => o.value === form.jenis)!;
 
@@ -318,7 +331,7 @@ export default function ResponAwam() {
 
                 {/* Keutamaan (for cadangan/permohonan) OR Star Rating (for maklumbalas) */}
                 {form.jenis === "maklumbalas" ? (
-                  <div>
+                  <div id="star-rating">
                     <label className="text-xs font-semibold text-gray-500 block mb-2">Penilaian Keseluruhan *</label>
                     <div className="flex items-center gap-1">
                       {[1, 2, 3, 4, 5].map((star) => (
