@@ -179,7 +179,7 @@ export default function CVTemplate({
         </div>
       </header>
 
-      {/* ── BODY ───────────────────────────────────────────────────────── */}
+      {/* ══ BODY — PAGE 1: 2-column (sidebar + portfolio) ═════════════ */}
       <div
         style={{
           display: "grid",
@@ -190,13 +190,8 @@ export default function CVTemplate({
           alignItems: "start",
         }}
       >
-        {/* ── LEFT COLUMN ────────────────────────────────────────────── */}
-        <div
-          style={{
-            paddingRight: 14,
-            borderRight: "1.5px solid #E5E7EB",
-          }}
-        >
+        {/* ── LEFT COLUMN — profil utama ──────────────────────────────── */}
+        <div style={{ paddingRight: 14, borderRight: "1.5px solid #E5E7EB" }}>
           {/* Ringkasan */}
           <div style={{ marginBottom: 10, breakInside: "avoid" }}>
             <h2 style={cvSectionTitle}>Ringkasan Profesional</h2>
@@ -210,11 +205,7 @@ export default function CVTemplate({
               {CV_LEADERSHIP.map((item, idx) => (
                 <div
                   key={idx}
-                  style={{
-                    paddingLeft: 7,
-                    borderLeft: "2px solid #1D4ED8",
-                    breakInside: "avoid",
-                  }}
+                  style={{ paddingLeft: 7, borderLeft: "2px solid #1D4ED8", breakInside: "avoid" }}
                 >
                   <p style={{ fontSize: 8, fontWeight: 700, color: "#1D4ED8", margin: "0 0 1px" }}>
                     {item.inisiatif}
@@ -232,31 +223,16 @@ export default function CVTemplate({
             <h2 style={cvSectionTitle}>Kemahiran Utama</h2>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 3 }}>
               {[
-                "Next.js / React",
-                "TypeScript",
-                "Laravel / PHP",
-                "Supabase",
-                "Firebase",
-                "MySQL / PostgreSQL",
-                "Tailwind CSS",
-                "Node.js",
-                "Gemini AI",
-                "Google Apps Script",
-                "React Native",
-                "Python",
-                "CI/CD",
+                "Next.js / React", "TypeScript", "Laravel / PHP", "Supabase",
+                "Firebase", "MySQL / PostgreSQL", "Tailwind CSS", "Node.js",
+                "Gemini AI", "Google Apps Script", "React Native", "Python", "CI/CD",
               ].map((skill) => (
                 <span
                   key={skill}
                   style={{
-                    fontSize: 7.5,
-                    padding: "2px 6px",
-                    borderRadius: 10,
-                    background: "#EFF6FF",
-                    color: "#1D4ED8",
-                    border: "1px solid #BFDBFE",
-                    fontWeight: 600,
-                    display: "inline-block",
+                    fontSize: 7.5, padding: "2px 6px", borderRadius: 10,
+                    background: "#EFF6FF", color: "#1D4ED8",
+                    border: "1px solid #BFDBFE", fontWeight: 600, display: "inline-block",
                   }}
                 >
                   {skill}
@@ -265,194 +241,25 @@ export default function CVTemplate({
             </div>
           </div>
 
-          {/* Pencapaian */}
-          <div style={{ marginBottom: 10, breakInside: "avoid" }}>
+          {/* Pencapaian Utama */}
+          <div style={{ breakInside: "avoid" }}>
             <h2 style={cvSectionTitle}>Pencapaian Utama</h2>
             <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
               {CV_PENCAPAIAN.map((p, i) => (
-                <div
-                  key={i}
-                  style={{ display: "flex", gap: 5, alignItems: "flex-start" }}
-                >
-                  <span
-                    style={{
-                      color: "#3B82F6",
-                      fontSize: 8,
-                      flexShrink: 0,
-                      marginTop: 2,
-                      fontWeight: 700,
-                    }}
-                  >
-                    ▸
-                  </span>
-                  <p style={{ fontSize: 8, color: "#374151", lineHeight: 1.5, margin: 0 }}>
-                    {p}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Pengalaman */}
-          <div style={{ marginBottom: 10, breakInside: "avoid" }}>
-            <h2 style={cvSectionTitle}>Pengalaman Kerja</h2>
-            <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
-              {CV_PENGALAMAN.map((exp, i) => (
-                <div
-                  key={i}
-                  style={{
-                    paddingLeft: 8,
-                    borderLeft: "2px solid #3B82F6",
-                    breakInside: "avoid",
-                  }}
-                >
-                  <p
-                    style={{
-                      fontSize: 8.5,
-                      fontWeight: 700,
-                      color: "#111827",
-                      margin: "0 0 1px",
-                    }}
-                  >
-                    {exp.jawatan}
-                  </p>
-                  <p
-                    style={{
-                      fontSize: 7.5,
-                      color: "#2563EB",
-                      fontWeight: 600,
-                      margin: "0 0 1px",
-                    }}
-                  >
-                    {exp.org}
-                  </p>
-                  <p
-                    style={{
-                      fontSize: 7,
-                      color: "#9CA3AF",
-                      margin: 0,
-                      fontStyle: "italic",
-                    }}
-                  >
-                    {exp.tahun}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Pendidikan */}
-          <div style={{ marginBottom: 10, breakInside: "avoid" }}>
-            <h2 style={cvSectionTitle}>Pendidikan</h2>
-            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-              {CV_PENDIDIKAN.map((p, i) => (
-                <div
-                  key={i}
-                  style={{
-                    paddingLeft: 8,
-                    borderLeft: "2px solid #93C5FD",
-                    breakInside: "avoid",
-                  }}
-                >
-                  <p
-                    style={{
-                      fontSize: 9,
-                      fontWeight: 600,
-                      color: "#111827",
-                      margin: "0 0 1px",
-                    }}
-                  >
-                    {p.kelayakan}
-                  </p>
-                  <p style={{ fontSize: 8, color: "#6B7280", margin: "0 0 1px" }}>
-                    {p.bidang}
-                  </p>
-                  <p style={{ fontSize: 8, color: "#6B7280", margin: "0 0 1px" }}>
-                    {p.institusi}
-                  </p>
-                  <p style={{ fontSize: 8, color: "#3B82F6", margin: 0 }}>
-                    {p.tahun}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Tech Stack Detail */}
-          <div style={{ marginBottom: 10, breakInside: "avoid" }}>
-            <h2 style={cvSectionTitle}>Teknologi Terperinci</h2>
-            <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
-              {SKILL_GROUPS.slice(0, 5).map((group) => (
-                <div key={group.kategori} style={{ breakInside: "avoid" }}>
-                  <p
-                    style={{
-                      fontSize: 7.5,
-                      fontWeight: 700,
-                      color: group.warna,
-                      margin: "0 0 1px",
-                    }}
-                  >
-                    {group.ikon} {group.kategori}
-                  </p>
-                  <p
-                    style={{
-                      fontSize: 7,
-                      color: "#4B5563",
-                      margin: 0,
-                      lineHeight: 1.4,
-                    }}
-                  >
-                    {group.kemahiran.join(" · ")}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Kemahiran Tambahan — moved here from right column */}
-          <div style={{ breakInside: "avoid" }}>
-            <h2 style={cvSectionTitle}>Kemahiran Tambahan</h2>
-            <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
-              {SKILL_GROUPS.slice(5).map((group) => (
-                <div key={group.kategori} style={{ breakInside: "avoid" }}>
-                  <p
-                    style={{
-                      fontSize: 7.5,
-                      fontWeight: 700,
-                      color: group.warna,
-                      margin: "0 0 1px",
-                    }}
-                  >
-                    {group.ikon} {group.kategori}
-                  </p>
-                  <p
-                    style={{
-                      fontSize: 7,
-                      color: "#4B5563",
-                      margin: 0,
-                      lineHeight: 1.4,
-                    }}
-                  >
-                    {group.kemahiran.join(" · ")}
-                  </p>
+                <div key={i} style={{ display: "flex", gap: 5, alignItems: "flex-start" }}>
+                  <span style={{ color: "#3B82F6", fontSize: 8, flexShrink: 0, marginTop: 2, fontWeight: 700 }}>▸</span>
+                  <p style={{ fontSize: 8, color: "#374151", lineHeight: 1.5, margin: 0 }}>{p}</p>
                 </div>
               ))}
             </div>
           </div>
         </div>
 
-        {/* ── RIGHT COLUMN — Portfolio ────────────────────────────────── */}
+        {/* ── RIGHT COLUMN — Portfolio ─────────────────────────────────── */}
         <div style={{ paddingLeft: 14 }}>
           <div style={{ marginBottom: 8 }}>
             <h2 style={cvSectionTitle}>Portfolio Inovasi Digital</h2>
-            <p
-              style={{
-                fontSize: 8,
-                color: "#6B7280",
-                margin: "0 0 10px",
-                fontStyle: "italic",
-              }}
-            >
+            <p style={{ fontSize: 8, color: "#6B7280", margin: "0 0 10px", fontStyle: "italic" }}>
               {inovasiList.length} projek telah dibangunkan · {aktifCount} aktif
               beroperasi · {tahunMin}–{tahunMax}
             </p>
@@ -463,78 +270,29 @@ export default function CVTemplate({
               <div
                 key={item.slug}
                 style={{
-                  padding: "7px 10px",
-                  borderRadius: 5,
+                  padding: "7px 10px", borderRadius: 5,
                   border: `1px solid ${item.warna_tema}28`,
                   borderLeft: `3px solid ${item.warna_tema}`,
                   background: `${item.warna_tema}05`,
-                  pageBreakInside: "avoid",
-                  breakInside: "avoid",
+                  pageBreakInside: "avoid", breakInside: "avoid",
                 }}
               >
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "flex-start",
-                    gap: 8,
-                  }}
-                >
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8 }}>
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    {/* Name row */}
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 5,
-                        marginBottom: 2,
-                        flexWrap: "wrap",
-                      }}
-                    >
+                    <div style={{ display: "flex", alignItems: "center", gap: 5, marginBottom: 2, flexWrap: "wrap" }}>
                       <span style={{ fontSize: 11 }}>{item.ikon}</span>
-                      <span
-                        style={{
-                          fontSize: 9.5,
-                          fontWeight: 700,
-                          color: "#111827",
-                        }}
-                      >
-                        {item.nama}
-                      </span>
-                      <span
-                        style={{
-                          fontSize: 8,
-                          color: "#9CA3AF",
-                          fontStyle: "italic",
-                        }}
-                      >
-                        ({item.tahun})
-                      </span>
+                      <span style={{ fontSize: 9.5, fontWeight: 700, color: "#111827" }}>{item.nama}</span>
+                      <span style={{ fontSize: 8, color: "#9CA3AF", fontStyle: "italic" }}>({item.tahun})</span>
                     </div>
-                    {/* Description */}
-                    <p
-                      style={{
-                        fontSize: 8,
-                        color: "#374151",
-                        lineHeight: 1.45,
-                        margin: "0 0 4px",
-                      }}
-                    >
-                      {item.deskripsi}
-                    </p>
-                    {/* Tech stack */}
+                    <p style={{ fontSize: 8, color: "#374151", lineHeight: 1.45, margin: "0 0 4px" }}>{item.deskripsi}</p>
                     <div style={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
                       {item.tech_stack.map((tech) => (
                         <span
                           key={tech}
                           style={{
-                            fontSize: 7,
-                            padding: "1px 5px",
-                            borderRadius: 8,
-                            background: `${item.warna_tema}14`,
-                            color: item.warna_tema,
-                            fontWeight: 600,
-                            border: `1px solid ${item.warna_tema}30`,
+                            fontSize: 7, padding: "1px 5px", borderRadius: 8,
+                            background: `${item.warna_tema}14`, color: item.warna_tema,
+                            fontWeight: 600, border: `1px solid ${item.warna_tema}30`,
                           }}
                         >
                           {tech}
@@ -542,36 +300,15 @@ export default function CVTemplate({
                       ))}
                     </div>
                   </div>
-
-                  {/* Status badge */}
                   <span
                     style={{
-                      fontSize: 7,
-                      padding: "2px 7px",
-                      borderRadius: 8,
-                      flexShrink: 0,
-                      background:
-                        item.status === "aktif"
-                          ? "#D1FAE5"
-                          : item.status === "dalam-pembangunan"
-                          ? "#FEF3C7"
-                          : "#F3F4F6",
-                      color:
-                        item.status === "aktif"
-                          ? "#065F46"
-                          : item.status === "dalam-pembangunan"
-                          ? "#92400E"
-                          : "#4B5563",
-                      fontWeight: 700,
-                      textTransform: "uppercase",
-                      letterSpacing: "0.05em",
+                      fontSize: 7, padding: "2px 7px", borderRadius: 8, flexShrink: 0,
+                      background: item.status === "aktif" ? "#D1FAE5" : item.status === "dalam-pembangunan" ? "#FEF3C7" : "#F3F4F6",
+                      color: item.status === "aktif" ? "#065F46" : item.status === "dalam-pembangunan" ? "#92400E" : "#4B5563",
+                      fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em",
                     }}
                   >
-                    {item.status === "aktif"
-                      ? "Aktif"
-                      : item.status === "dalam-pembangunan"
-                      ? "WIP"
-                      : "Arkib"}
+                    {item.status === "aktif" ? "Aktif" : item.status === "dalam-pembangunan" ? "WIP" : "Arkib"}
                   </span>
                 </div>
               </div>
@@ -587,12 +324,10 @@ export default function CVTemplate({
                   <div
                     key={i}
                     style={{
-                      padding: "7px 9px",
-                      borderRadius: 5,
+                      padding: "7px 9px", borderRadius: 5,
                       border: "1px solid rgba(59,130,246,0.2)",
                       borderLeft: "3px solid #3B82F6",
-                      background: "#F0F7FF",
-                      breakInside: "avoid",
+                      background: "#F0F7FF", breakInside: "avoid",
                     }}
                   >
                     <div style={{ marginBottom: 3 }}>
@@ -600,26 +335,111 @@ export default function CVTemplate({
                         <span key={s} style={{ color: s <= t.rating ? "#F59E0B" : "#D1D5DB", fontSize: 8 }}>★</span>
                       ))}
                     </div>
-                    <p
-                      style={{
-                        fontSize: 7.5,
-                        color: "#374151",
-                        lineHeight: 1.45,
-                        margin: "0 0 4px",
-                        fontStyle: "italic",
-                      }}
-                    >
+                    <p style={{ fontSize: 7.5, color: "#374151", lineHeight: 1.45, margin: "0 0 4px", fontStyle: "italic" }}>
                       &ldquo;{t.mesej}&rdquo;
                     </p>
-                    <p style={{ fontSize: 7, fontWeight: 700, color: "#1D4ED8", margin: 0 }}>
-                      — {t.nama}
-                    </p>
+                    <p style={{ fontSize: 7, fontWeight: 700, color: "#1D4ED8", margin: 0 }}>— {t.nama}</p>
                   </div>
                 ))}
               </div>
             </div>
           )}
+        </div>
+      </div>
 
+      {/* ══ BODY — PAGE 2: full-width 3-column (Pengalaman | Pendidikan | Teknologi) ═══ */}
+      <div
+        style={{
+          padding: "0 22px 14px",
+          borderTop: "1.5px dashed #DBEAFE",
+          background: "white",
+        }}
+      >
+        {/* Section label */}
+        <p
+          style={{
+            fontSize: 7,
+            color: "#93C5FD",
+            fontWeight: 700,
+            letterSpacing: "0.15em",
+            textTransform: "uppercase",
+            margin: "8px 0 10px",
+          }}
+        >
+          ── Latar Belakang &amp; Kompetensi Teknikal ──────────────────────────────────────────────────────────────
+        </p>
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr 1fr",
+            gap: 16,
+            alignItems: "start",
+          }}
+        >
+          {/* ── Col 1: Pengalaman Kerja ── */}
+          <div style={{ breakInside: "avoid" }}>
+            <h2 style={cvSectionTitle}>Pengalaman Kerja</h2>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              {CV_PENGALAMAN.map((exp, i) => (
+                <div key={i} style={{ paddingLeft: 8, borderLeft: "2px solid #3B82F6", breakInside: "avoid" }}>
+                  <p style={{ fontSize: 8.5, fontWeight: 700, color: "#111827", margin: "0 0 1px" }}>{exp.jawatan}</p>
+                  <p style={{ fontSize: 7.5, color: "#2563EB", fontWeight: 600, margin: "0 0 1px" }}>{exp.org}</p>
+                  <p style={{ fontSize: 7, color: "#9CA3AF", margin: 0, fontStyle: "italic" }}>{exp.tahun}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* ── Col 2: Pendidikan + Kemahiran Tambahan ── */}
+          <div>
+            <div style={{ marginBottom: 12, breakInside: "avoid" }}>
+              <h2 style={cvSectionTitle}>Pendidikan</h2>
+              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                {CV_PENDIDIKAN.map((p, i) => (
+                  <div key={i} style={{ paddingLeft: 8, borderLeft: "2px solid #93C5FD", breakInside: "avoid" }}>
+                    <p style={{ fontSize: 9, fontWeight: 600, color: "#111827", margin: "0 0 1px" }}>{p.kelayakan}</p>
+                    <p style={{ fontSize: 8, color: "#6B7280", margin: "0 0 1px" }}>{p.bidang}</p>
+                    <p style={{ fontSize: 8, color: "#6B7280", margin: "0 0 1px" }}>{p.institusi}</p>
+                    <p style={{ fontSize: 8, color: "#3B82F6", margin: 0 }}>{p.tahun}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div style={{ breakInside: "avoid" }}>
+              <h2 style={cvSectionTitle}>Kemahiran Tambahan</h2>
+              <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+                {SKILL_GROUPS.slice(5).map((group) => (
+                  <div key={group.kategori} style={{ breakInside: "avoid" }}>
+                    <p style={{ fontSize: 7.5, fontWeight: 700, color: group.warna, margin: "0 0 1px" }}>
+                      {group.ikon} {group.kategori}
+                    </p>
+                    <p style={{ fontSize: 7, color: "#4B5563", margin: 0, lineHeight: 1.4 }}>
+                      {group.kemahiran.join(" · ")}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* ── Col 3: Teknologi Terperinci ── */}
+          <div style={{ breakInside: "avoid" }}>
+            <h2 style={cvSectionTitle}>Teknologi Terperinci</h2>
+            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+              {SKILL_GROUPS.slice(0, 5).map((group) => (
+                <div key={group.kategori} style={{ breakInside: "avoid" }}>
+                  <p style={{ fontSize: 7.5, fontWeight: 700, color: group.warna, margin: "0 0 1px" }}>
+                    {group.ikon} {group.kategori}
+                  </p>
+                  <p style={{ fontSize: 7, color: "#4B5563", margin: 0, lineHeight: 1.4 }}>
+                    {group.kemahiran.join(" · ")}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
 
