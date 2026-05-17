@@ -7,18 +7,28 @@ export async function GET() {
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   );
 
-  const { data, error } = await supabase
-    .from("respon_awam")
-    .select("id, nama, mesej, rating, created_at")
-    .eq("jenis", "maklumbalas")
-    .gte("rating", 4)
-    .order("rating", { ascending: false })
-    .order("created_at", { ascending: false })
-    .limit(6);
+  const [itemsResult, countResult] = await Promise.all([
+    supabase
+      .from("respon_awam")
+      .select("id, nama, mesej, rating, created_at")
+      .eq("jenis", "maklumbalas")
+      .gte("rating", 4)
+      .order("rating", { ascending: false })
+      .order("created_at", { ascending: false })
+      .limit(6),
+    supabase
+      .from("respon_awam")
+      .select("*", { count: "exact", head: true })
+      .eq("jenis", "maklumbalas")
+      .gte("rating", 4),
+  ]);
 
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  if (itemsResult.error) {
+    return NextResponse.json({ error: itemsResult.error.message }, { status: 500 });
   }
 
-  return NextResponse.json(data ?? []);
+  return NextResponse.json({
+    items: itemsResult.data ?? [],
+    total: countResult.count ?? 0,
+  });
 }

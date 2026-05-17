@@ -31,14 +31,6 @@ function useCountUp(target: number, duration = 1200) {
   return count;
 }
 
-type Testimonial = {
-  id: string;
-  nama: string;
-  mesej: string;
-  rating: number;
-  created_at: string;
-};
-
 function StarDisplay({ rating }: { rating: number }) {
   return (
     <span className="flex items-center gap-1.5">
@@ -58,19 +50,21 @@ function StarDisplay({ rating }: { rating: number }) {
 
 export default function TestimonialSection() {
   const [items, setItems] = useState<Testimonial[]>([]);
+  const [totalCount, setTotalCount] = useState(0);
   const [newIds, setNewIds] = useState<Set<string>>(new Set());
   const seenIds = useRef<Set<string>>(new Set());
 
-  const respondentCount = useCountUp(items.length, 1000);
+  const respondentCount = useCountUp(totalCount, 1000);
 
   useEffect(() => {
     // Initial fetch
     fetch("/api/testimonial")
       .then((r) => r.json())
-      .then((data: Testimonial[]) => {
-        if (Array.isArray(data)) {
-          setItems(data);
-          seenIds.current = new Set(data.map((d) => d.id));
+      .then((res: { items: Testimonial[]; total: number }) => {
+        if (Array.isArray(res.items)) {
+          setItems(res.items);
+          setTotalCount(res.total);
+          seenIds.current = new Set(res.items.map((d) => d.id));
         }
       });
 
@@ -81,6 +75,8 @@ export default function TestimonialSection() {
         const item: Testimonial = JSON.parse(e.data);
         if (seenIds.current.has(item.id)) return;
         seenIds.current.add(item.id);
+        // Increment total count from DB for accurate counter
+        setTotalCount((prev) => prev + 1);
         // Mark as new for glow animation
         setNewIds((prev) => new Set(prev).add(item.id));
         setItems((prev) =>
