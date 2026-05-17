@@ -42,6 +42,12 @@ export default function Navbar() {
             Tentang
           </a>
           <a
+            href="#testimoni"
+            className="text-sm text-gray-500 hover:text-brand-600 font-medium transition-colors"
+          >
+            Testimoni
+          </a>
+          <a
             href="#respon"
             className="text-sm text-gray-500 hover:text-brand-600 font-medium transition-colors"
           >
