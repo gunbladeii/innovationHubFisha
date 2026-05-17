@@ -1,0 +1,20 @@
+{
+  "name": "FISHA Innovation Hub",
+  "short_name": "FISHA Hub",
+  "description": "Portal Inovasi Digital",
+  "theme_color": "#1D4ED8",
+  "background_color": "#EFF6FF",
+  "display": "standalone",
+  "icons": [
+    {
+      "src": "/brand/android-chrome-192x192-v2.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/brand/android-chrome-512x512-v2.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

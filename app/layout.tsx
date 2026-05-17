@@ -13,6 +13,17 @@ export const metadata: Metadata = {
     type: "website",
     locale: "ms_MY",
   },
+  manifest: "/site.webmanifest",
+  icons: {
+    icon: [
+      { url: "/brand/favicon-16x16-v2.png", sizes: "16x16", type: "image/png" },
+      { url: "/brand/favicon-32x32-v2.png", sizes: "32x32", type: "image/png" },
+      { url: "/brand/android-chrome-192x192-v2.png", sizes: "192x192", type: "image/png" },
+      { url: "/brand/android-chrome-512x512-v2.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [{ url: "/brand/apple-touch-icon-v2.png", sizes: "180x180", type: "image/png" }],
+    shortcut: ["/brand/favicon-32x32-v2.png"],
+  },
 };
 
 export default function RootLayout({

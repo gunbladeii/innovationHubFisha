@@ -112,9 +112,9 @@ export default function HeroSection() {
         {/* Logo banner */}
         <div className="flex justify-center items-center mb-8 w-full">
           <img
-            src="/fisha-logo.png"
+            src="/brand/brand-banner-v2.png"
             alt="Inovasi Digital FISHA"
-            className="w-[320px] sm:w-[420px] md:w-[540px] lg:w-[620px] h-auto object-contain"
+            className="w-[360px] sm:w-[560px] md:w-[780px] lg:w-[980px] h-auto object-contain"
           />
         </div>
 
