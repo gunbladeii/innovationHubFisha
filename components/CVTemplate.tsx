@@ -5,6 +5,7 @@ import {
   CV_PENDIDIKAN,
   CV_PENGALAMAN,
   CV_PENCAPAIAN,
+  CV_LEADERSHIP,
 } from "@/lib/data";
 
 // ─── Shared print styles ──────────────────────────────────────────────────────
@@ -30,7 +31,9 @@ const leftLabel: React.CSSProperties = {
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
-export default function CVTemplate() {
+type CVTestimonial = { nama: string; mesej: string; rating: number };
+
+export default function CVTemplate({ testimonials = [] }: { testimonials?: CVTestimonial[] }) {
   const aktifCount = INOVASI_SEED.filter((i) => i.status === "aktif").length;
   const tahunMin = Math.min(...INOVASI_SEED.map((i) => i.tahun));
   const tahunMax = Math.max(...INOVASI_SEED.map((i) => i.tahun));
@@ -191,6 +194,30 @@ export default function CVTemplate() {
           <div style={{ marginBottom: 10, breakInside: "avoid" }}>
             <h2 style={cvSectionTitle}>Ringkasan Profesional</h2>
             <p style={leftLabel}>{CV_PERSONAL.bio}</p>
+          </div>
+
+          {/* Inisiatif Kepimpinan Strategik */}
+          <div style={{ marginBottom: 10, breakInside: "avoid" }}>
+            <h2 style={cvSectionTitle}>Inisiatif Kepimpinan Strategik</h2>
+            <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+              {CV_LEADERSHIP.map((item, idx) => (
+                <div
+                  key={idx}
+                  style={{
+                    paddingLeft: 7,
+                    borderLeft: "2px solid #1D4ED8",
+                    breakInside: "avoid",
+                  }}
+                >
+                  <p style={{ fontSize: 8, fontWeight: 700, color: "#1D4ED8", margin: "0 0 1px" }}>
+                    {item.inisiatif}
+                  </p>
+                  <p style={{ fontSize: 7.5, color: "#374151", margin: 0, lineHeight: 1.45 }}>
+                    {item.impak}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* Kemahiran Utama */}
@@ -544,6 +571,47 @@ export default function CVTemplate() {
             ))}
           </div>
 
+          {/* Pengesahan Rakan Sejawat */}
+          {testimonials.length > 0 && (
+            <div style={{ marginTop: 12, breakInside: "avoid" }}>
+              <h2 style={cvSectionTitle}>Pengesahan Rakan Sejawat</h2>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
+                {testimonials.map((t, i) => (
+                  <div
+                    key={i}
+                    style={{
+                      padding: "7px 9px",
+                      borderRadius: 5,
+                      border: "1px solid rgba(59,130,246,0.2)",
+                      borderLeft: "3px solid #3B82F6",
+                      background: "#F0F7FF",
+                      breakInside: "avoid",
+                    }}
+                  >
+                    <div style={{ marginBottom: 3 }}>
+                      {[1, 2, 3, 4, 5].map((s) => (
+                        <span key={s} style={{ color: s <= t.rating ? "#F59E0B" : "#D1D5DB", fontSize: 8 }}>★</span>
+                      ))}
+                    </div>
+                    <p
+                      style={{
+                        fontSize: 7.5,
+                        color: "#374151",
+                        lineHeight: 1.45,
+                        margin: "0 0 4px",
+                        fontStyle: "italic",
+                      }}
+                    >
+                      &ldquo;{t.mesej}&rdquo;
+                    </p>
+                    <p style={{ fontSize: 7, fontWeight: 700, color: "#1D4ED8", margin: 0 }}>
+                      — {t.nama}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
         </div>
       </div>

@@ -6,8 +6,33 @@ import TentangSaya from "@/components/TentangSaya";
 import ResponAwam from "@/components/ResponAwam";
 import CVTemplate from "@/components/CVTemplate";
 import FloatingRatingButton from "@/components/FloatingRatingButton";
+import { createClient } from "@supabase/supabase-js";
 
-export default function HomePage() {
+async function getCVTestimonials() {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    return [];
+  }
+  try {
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL,
+      process.env.SUPABASE_SERVICE_ROLE_KEY
+    );
+    const { data } = await supabase
+      .from("respon_awam")
+      .select("nama, mesej, rating")
+      .eq("jenis", "maklumbalas")
+      .gte("rating", 4)
+      .order("rating", { ascending: false })
+      .order("created_at", { ascending: false })
+      .limit(4);
+    return data ?? [];
+  } catch {
+    return [];
+  }
+}
+
+export default async function HomePage() {
+  const cvTestimonials = await getCVTestimonials();
   return (
     <>
       {/* ── Live website (hidden during print) ───────────────────────── */}
@@ -39,7 +64,7 @@ export default function HomePage() {
       </div>
 
       {/* ── CV / Résumé template (only visible when printing / saving PDF) ── */}
-      <CVTemplate />
+      <CVTemplate testimonials={cvTestimonials} />
     </>
   );
 }

@@ -237,13 +237,13 @@ export const INOVASI_SEED: InovasiSeedItem[] = [
 
 export const CV_PERSONAL = {
   nama: "Mohd Fisha Hafiz Bin Abidin",
-  jawatan: "Pegawai ICT | Pembangun Sistem Digital",
+  jawatan: "Ketua Penolong Pengarah | Unit Data, Sektor Data & Teknologi Maklumat",
   organisasi: "Jemaah Nazir, Kementerian Pendidikan Malaysia",
   lokasi: "Kuala Lumpur, Malaysia",
   email: "fisha@moe.gov.my",
   telefon: "013-4159484",
   telefonPejabat: "03-88844250",
-  bio: "Pegawai ICT berpengalaman dalam pembangunan sistem digital inovatif untuk sektor kerajaan. Berkhidmat dalam sektor pendidikan awam sejak 2008, kini membangunkan 12+ sistem digital di Jemaah Nazir bagi meningkatkan kecekapan pemeriksaan sekolah dan transformasi pendidikan Malaysia. Pakar dalam web development moden, integrasi AI, cloud computing dan pembangunan aplikasi mudah alih.",
+  bio: "Pemimpin ICT berpengalaman dengan rekod prestasi terbukti dalam membangun dan mengurus ekosistem digital berskala nasional. Sebagai Ketua Penolong Pengarah Unit Data, SDTM, Jemaah Nazir KPM, memimpin inisiatif transformasi digital menyeluruh — dari perancangan strategik hingga perlaksanaan teknikal — menghasil 12+ sistem inovatif yang memberi impak langsung kepada pemeriksaan sekolah seluruh Malaysia. Berkomitmen membina organisasi berasaskan data, berdaya saing dan diperkasakan AI.",
 };
 
 export const CV_PENDIDIKAN = [
@@ -257,38 +257,63 @@ export const CV_PENDIDIKAN = [
 
 export const CV_PENGALAMAN = [
   {
-    tahun: "2017 – kini",
-    jawatan: "Pegawai ICT / Pembangun Sistem Digital",
+    tahun: "2023 – kini",
+    jawatan: "Ketua Penolong Pengarah, Unit Data",
+    org: "SDTM, Jemaah Nazir, KPM",
+    desc: "Memimpin Unit Data dalam merancang, membangun dan mengurus ekosistem digital JN. Merangka dasar data, membangun sistem kritikal, mengintegrasikan AI/cloud dan menyelaras transformasi digital peringkat nasional.",
+  },
+  {
+    tahun: "2017 – 2022",
+    jawatan: "Pegawai ICT Kanan / Pembangun Sistem Digital",
     org: "Jemaah Nazir, KPM",
-    desc: "Membangunkan dan menyelenggara 12+ sistem digital bagi transformasi proses pemeriksaan sekolah dan pengurusan pendidikan negara. Mengintegrasikan teknologi AI, cloud dan mobile dalam ekosistem digital Jemaah Nazir.",
+    desc: "Membangunkan dan menyelenggara sistem digital bagi transformasi pemeriksaan sekolah. Mengintegrasikan AI, cloud dan mobile dalam ekosistem digital JN.",
   },
   {
     tahun: "2014 – 2017",
     jawatan: "Pegawai ICT",
     org: "Bahagian Buku Teks, KPM",
-    desc: "Berkhidmat dalam pengurusan teknologi maklumat dan pembangunan sistem di Bahagian Buku Teks, Kementerian Pendidikan Malaysia.",
+    desc: "Pengurusan teknologi maklumat dan pembangunan sistem ICT peringkat kementerian.",
   },
   {
     tahun: "2014",
     jawatan: "Pegawai ICT",
     org: "Bahagian Teknologi Pendidikan, KPM",
-    desc: "Berkhidmat dalam pengurusan dan pembangunan teknologi pendidikan di peringkat kementerian.",
+    desc: "Pengurusan dan pembangunan teknologi pendidikan di peringkat kementerian.",
   },
   {
     tahun: "2008 – 2014",
     jawatan: "Guru / Pegawai Pendidikan",
     org: "SMK Lutong",
-    desc: "Berkhidmat sebagai pendidik dalam sektor pendidikan awam, menjadi asas pengalaman dalam bidang pendidikan dan teknologi.",
+    desc: "Pendidik sektor awam — asas kepada kepakaran dalam ekosistem pendidikan.",
   },
 ];
 
 export const CV_PENCAPAIAN = [
-  "Membangunkan 12+ sistem digital dalam masa 5 tahun untuk Jemaah Nazir, KPM",
-  "Mempelopori integrasi AI (Gemini) dalam sistem analitik pendidikan sektor awam Malaysia",
-  "Mengurangkan masa pemprosesan tuntutan & pemantauan sekolah melalui automasi digital penuh",
-  "Membangunkan aplikasi mudah alih cross-platform (Android & iOS) untuk pengurusan pemeriksaan",
-  "Mengimplementasi CI/CD pipeline (GitLab) untuk deployment berterusan sistem kerajaan",
-  "Membina ekosistem digital bersepadu: web + mobile + AI + cloud dalam satu platform",
+  "Memimpin Unit Data SDTM dalam membangunkan 12+ sistem digital kritikal untuk transformasi Jemaah Nazir, KPM",
+  "Merangka dan melaksanakan strategi digitalisasi pemeriksaan sekolah peringkat nasional",
+  "Mempelopori integrasi AI Generatif (Gemini) dalam analitik pendidikan sektor awam — inovasi pertama di KPM",
+  "Mengurangkan masa pemprosesan laporan pemeriksaan >60% melalui automasi digital penuh",
+  "Membina platform multi-sistem menghubungkan JPN & sekolah seluruh Malaysia",
+  "Mengimplementasi CI/CD pipeline dan amalan DevOps dalam persekitaran kerajaan",
+];
+
+export const CV_LEADERSHIP = [
+  {
+    inisiatif: "Transformasi Digital Jemaah Nazir",
+    impak: "Memimpin pembangunan 12+ sistem — menggantikan 100% proses manual; masa pemprosesan laporan berkurangan >60%",
+  },
+  {
+    inisiatif: "Pionir AI dalam Pendidikan Awam",
+    impak: "Sistem pertama KPM berintegrasi Gemini AI dalam analitik kualiti sekolah secara real-time peringkat nasional",
+  },
+  {
+    inisiatif: "Governans Data Strategik SDTM",
+    impak: "Menyelaras pengurusan data merentas 4 sektor JN; membina rangka kerja data governance berstruktur",
+  },
+  {
+    inisiatif: "Pembangunan Kapasiti ICT",
+    impak: "Melatih dan memimpin pasukan teknologi moden; membina amalan DevOps & CI/CD pertama persekitaran kerajaan",
+  },
 ];
 
 export const SKILL_GROUPS = [
