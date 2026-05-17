@@ -14,6 +14,7 @@ export default function InovasiGrid() {
   const [data, setData] = useState<InovasiSeedItem[]>(INOVASI_SEED);
 
   useEffect(() => {
+    if (!supabase) return;
     supabase
       .from("inovasi")
       .select("*")

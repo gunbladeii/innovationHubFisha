@@ -67,6 +67,10 @@ export default function ResponAwam() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.nama || !form.email || !form.mesej) return;
+    if (!supabase) {
+      alert("Perkhidmatan maklum balas tidak tersedia buat masa ini. Sila cuba lagi kemudian.");
+      return;
+    }
     setLoading(true);
     try {
       const isMaklumbalas = form.jenis === "maklumbalas";

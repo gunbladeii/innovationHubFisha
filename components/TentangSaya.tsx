@@ -14,6 +14,7 @@ const PROFIL = {
 function useTotalInovasi() {
   const [total, setTotal] = useState<number | null>(null);
   useEffect(() => {
+    if (!supabase) return;
     supabase
       .from("inovasi")
       .select("id", { count: "exact", head: true })

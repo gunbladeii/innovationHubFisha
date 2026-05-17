@@ -60,6 +60,7 @@ export default function HeroSection() {
   const aktifCount  = useCountUp(stats.aktif);
 
   useEffect(() => {
+    if (!supabase) return;
     supabase
       .from("inovasi")
       .select("status, tahun")
