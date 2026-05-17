@@ -243,7 +243,7 @@ export const CV_PERSONAL = {
   email: "fisha@moe.gov.my",
   telefon: "013-4159484",
   telefonPejabat: "03-88844250",
-  bio: "Pemimpin ICT berpengalaman dengan rekod prestasi terbukti dalam membangun dan mengurus ekosistem digital berskala nasional. Sebagai Ketua Penolong Pengarah Unit Data, SDTM, Jemaah Nazir KPM, memimpin inisiatif transformasi digital menyeluruh — dari perancangan strategik hingga perlaksanaan teknikal — menghasil 12+ sistem inovatif yang memberi impak langsung kepada pemeriksaan sekolah seluruh Malaysia. Berkomitmen membina organisasi berasaskan data, berdaya saing dan diperkasakan AI.",
+  bio: "Pemimpin ICT berpengalaman dengan rekod prestasi terbukti dalam membangun dan mengurus ekosistem digital berskala nasional. Sebagai Ketua Penolong Pengarah Unit Data, SDTM, Jemaah Nazir KPM, memimpin inisiatif transformasi digital menyeluruh — dari perancangan strategik hingga perlaksanaan teknikal — menghasil 12+ sistem inovatif yang memberi impak langsung kepada pemeriksaan sekolah seluruh Malaysia. Berkhidmat dalam perkhidmatan awam pendidikan sejak 2008, berkomitmen membina organisasi berasaskan data, berdaya saing dan diperkasakan AI.",
 };
 
 export const CV_PENDIDIKAN = [
@@ -257,32 +257,32 @@ export const CV_PENDIDIKAN = [
 
 export const CV_PENGALAMAN = [
   {
-    tahun: "2023 – kini",
+    tahun: "2026 – kini",
     jawatan: "Ketua Penolong Pengarah, Unit Data",
     org: "SDTM, Jemaah Nazir, KPM",
     desc: "Memimpin Unit Data dalam merancang, membangun dan mengurus ekosistem digital JN. Merangka dasar data, membangun sistem kritikal, mengintegrasikan AI/cloud dan menyelaras transformasi digital peringkat nasional.",
   },
   {
-    tahun: "2017 – 2022",
-    jawatan: "Pegawai ICT Kanan / Pembangun Sistem Digital",
+    tahun: "2021 – 2025",
+    jawatan: "Penolong Pengarah, Unit Data",
     org: "Jemaah Nazir, KPM",
     desc: "Membangunkan dan menyelenggara sistem digital bagi transformasi pemeriksaan sekolah. Mengintegrasikan AI, cloud dan mobile dalam ekosistem digital JN.",
   },
   {
-    tahun: "2014 – 2017",
-    jawatan: "Pegawai ICT",
+    tahun: "2017 – 2021",
+    jawatan: "Penolong Pengarah, Unit Teknik dan Vokasional",
     org: "Bahagian Buku Teks, KPM",
-    desc: "Pengurusan teknologi maklumat dan pembangunan sistem ICT peringkat kementerian.",
+    desc: "Pengurusan dan pembangunan sistem ICT serta penyelarasan teknologi untuk unit Teknik dan Vokasional peringkat kementerian.",
   },
   {
-    tahun: "2014",
-    jawatan: "Pegawai ICT",
+    tahun: "2014 – 2017",
+    jawatan: "Penolong Pengarah / PMO 1BestariNet",
     org: "Bahagian Teknologi Pendidikan, KPM",
-    desc: "Pengurusan dan pembangunan teknologi pendidikan di peringkat kementerian.",
+    desc: "Pengurusan program 1BestariNet peringkat kementerian — memastikan pelaksanaan infrastruktur ICT dan capaian internet berkelajuan tinggi di sekolah seluruh Malaysia.",
   },
   {
     tahun: "2008 – 2014",
-    jawatan: "Guru / Pegawai Pendidikan",
+    jawatan: "Guru / Pegawai Perkhidmatan Pendidikan",
     org: "SMK Lutong",
     desc: "Pendidik sektor awam — asas kepada kepakaran dalam ekosistem pendidikan.",
   },
