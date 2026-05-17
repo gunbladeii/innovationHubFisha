@@ -7,16 +7,17 @@ import ResponAwam from "@/components/ResponAwam";
 import CVTemplate from "@/components/CVTemplate";
 import FloatingRatingButton from "@/components/FloatingRatingButton";
 import { createClient } from "@supabase/supabase-js";
+import { INOVASI_SEED, type InovasiSeedItem } from "@/lib/data";
+
+function getServerClient() {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) return null;
+  return createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
+}
 
 async function getCVTestimonials() {
-  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
-    return [];
-  }
+  const supabase = getServerClient();
+  if (!supabase) return [];
   try {
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL,
-      process.env.SUPABASE_SERVICE_ROLE_KEY
-    );
     const { data } = await supabase
       .from("respon_awam")
       .select("nama, mesej, rating")
@@ -31,8 +32,27 @@ async function getCVTestimonials() {
   }
 }
 
+async function getCVInovasi(): Promise<InovasiSeedItem[]> {
+  const supabase = getServerClient();
+  if (!supabase) return INOVASI_SEED;
+  try {
+    const { data, error } = await supabase
+      .from("inovasi")
+      .select("*")
+      .eq("is_published", true)
+      .order("urutan", { ascending: true });
+    if (error || !data || data.length === 0) return INOVASI_SEED;
+    return data as InovasiSeedItem[];
+  } catch {
+    return INOVASI_SEED;
+  }
+}
+
 export default async function HomePage() {
-  const cvTestimonials = await getCVTestimonials();
+  const [cvTestimonials, cvInovasi] = await Promise.all([
+    getCVTestimonials(),
+    getCVInovasi(),
+  ]);
   return (
     <>
       {/* ── Live website (hidden during print) ───────────────────────── */}
@@ -64,7 +84,7 @@ export default async function HomePage() {
       </div>
 
       {/* ── CV / Résumé template (only visible when printing / saving PDF) ── */}
-      <CVTemplate testimonials={cvTestimonials} />
+      <CVTemplate testimonials={cvTestimonials} inovasiList={cvInovasi} />
     </>
   );
 }

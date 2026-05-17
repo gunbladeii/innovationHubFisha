@@ -6,6 +6,7 @@ import {
   CV_PENGALAMAN,
   CV_PENCAPAIAN,
   CV_LEADERSHIP,
+  type InovasiSeedItem,
 } from "@/lib/data";
 
 // ─── Shared print styles ──────────────────────────────────────────────────────
@@ -33,10 +34,16 @@ const leftLabel: React.CSSProperties = {
 
 type CVTestimonial = { nama: string; mesej: string; rating: number };
 
-export default function CVTemplate({ testimonials = [] }: { testimonials?: CVTestimonial[] }) {
-  const aktifCount = INOVASI_SEED.filter((i) => i.status === "aktif").length;
-  const tahunMin = Math.min(...INOVASI_SEED.map((i) => i.tahun));
-  const tahunMax = Math.max(...INOVASI_SEED.map((i) => i.tahun));
+export default function CVTemplate({
+  testimonials = [],
+  inovasiList = INOVASI_SEED,
+}: {
+  testimonials?: CVTestimonial[];
+  inovasiList?: InovasiSeedItem[];
+}) {
+  const aktifCount = inovasiList.filter((i) => i.status === "aktif").length;
+  const tahunMin = Math.min(...inovasiList.map((i) => i.tahun));
+  const tahunMax = Math.max(...inovasiList.map((i) => i.tahun));
 
   return (
     <div
@@ -119,7 +126,7 @@ export default function CVTemplate({ testimonials = [] }: { testimonials?: CVTes
           }}
         >
           {[
-            { value: `${INOVASI_SEED.length}+`, label: "Sistem\nDibangunkan" },
+            { value: `${inovasiList.length}+`, label: "Sistem\nDibangunkan" },
             { value: `${aktifCount}`, label: "Sistem\nAktif" },
             { value: `${tahunMax - tahunMin + 1}+`, label: "Tahun\nInovasi" },
           ].map((stat) => (
@@ -446,13 +453,13 @@ export default function CVTemplate({ testimonials = [] }: { testimonials?: CVTes
                 fontStyle: "italic",
               }}
             >
-              {INOVASI_SEED.length} projek telah dibangunkan · {aktifCount} aktif
+              {inovasiList.length} projek telah dibangunkan · {aktifCount} aktif
               beroperasi · {tahunMin}–{tahunMax}
             </p>
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-            {INOVASI_SEED.map((item) => (
+            {inovasiList.map((item) => (
               <div
                 key={item.slug}
                 style={{
