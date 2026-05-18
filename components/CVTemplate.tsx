@@ -350,7 +350,7 @@ export default function CVTemplate({
       {/* ══ BODY — PAGE 2: full-width 3-column (Pengalaman | Pendidikan | Teknologi) ═══ */}
       <div
         style={{
-          padding: "0 22px 14px",
+          padding: "14px 22px 14px",
           borderTop: "1.5px dashed #DBEAFE",
           background: "white",
         }}
@@ -363,7 +363,7 @@ export default function CVTemplate({
             fontWeight: 700,
             letterSpacing: "0.15em",
             textTransform: "uppercase",
-            margin: "8px 0 10px",
+            margin: "0 0 10px",
           }}
         >
           ── Latar Belakang &amp; Kompetensi Teknikal ──────────────────────────────────────────────────────────────

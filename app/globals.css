@@ -129,7 +129,7 @@
   /* A4 page setup */
   @page {
     size: A4 portrait;
-    margin: 0;
+    margin: 10mm 0;
   }
 
   /* Hide live-site content */
