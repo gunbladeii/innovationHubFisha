@@ -30,6 +30,8 @@
     color: #1E293B;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* Prevent horizontal scroll caused by side-slide entrance animations */
+    overflow-x: hidden;
   }
 
   h1, h2, h3, h4, h5, h6 {
