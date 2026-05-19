@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import { createPortal } from "react-dom";
+import { FileDown, Loader2 } from "lucide-react";
 
 type Testimonial = {
   id: string;
@@ -32,11 +33,192 @@ function useCountUp(target: number, duration = 1200) {
   return count;
 }
 
+/* ── Generate decorated testimonial PDF ── */
+async function exportTestimonialsPDF(items: Testimonial[]) {
+  const avgRating = items.length
+    ? (items.reduce((s, t) => s + t.rating, 0) / items.length).toFixed(1)
+    : "0";
+  const fiveStars = items.filter((t) => t.rating === 5).length;
+  const generatedDate = new Date().toLocaleDateString("ms-MY", {
+    day: "2-digit", month: "long", year: "numeric",
+  });
+
+  const cards = items
+    .map((t, i) => {
+      const stars = [1, 2, 3, 4, 5]
+        .map((s) => `<span style="color:${s <= t.rating ? "#F59E0B" : "#D1D5DB"};font-size:13px">★</span>`)
+        .join("");
+      const hue = (i * 67 + 210) % 360;
+      const dateStr = new Date(t.created_at).toLocaleDateString("ms-MY", {
+        day: "2-digit", month: "short", year: "numeric",
+      });
+      return `
+        <div style="
+          background:#fff;
+          border:1px solid rgba(59,130,246,0.18);
+          border-left:4px solid hsl(${hue},60%,55%);
+          border-radius:8px;
+          padding:12px 14px;
+          break-inside:avoid;
+          page-break-inside:avoid;
+          margin-bottom:10px;
+        ">
+          <div style="display:flex;align-items:center;gap:9px;margin-bottom:7px">
+            <div style="
+              width:32px;height:32px;border-radius:50%;flex-shrink:0;
+              background:hsl(${hue},70%,92%);
+              color:hsl(${hue},60%,35%);
+              display:flex;align-items:center;justify-content:center;
+              font-size:13px;font-weight:800;
+            ">${t.nama.trim().charAt(0).toUpperCase()}</div>
+            <div style="flex:1;min-width:0">
+              <p style="margin:0;font-size:10px;font-weight:700;color:#1E293B;line-height:1.3">${t.nama}</p>
+              <div style="display:flex;align-items:center;gap:6px;margin-top:2px">
+                <span>${stars}</span>
+                <span style="font-size:8.5px;color:#9CA3AF">${dateStr}</span>
+              </div>
+            </div>
+            <span style="
+              font-size:8px;font-weight:700;
+              background:${t.rating === 5 ? "#D1FAE5" : t.rating >= 4 ? "#DBEAFE" : "#F3F4F6"};
+              color:${t.rating === 5 ? "#065F46" : t.rating >= 4 ? "#1D4ED8" : "#6B7280"};
+              padding:2px 8px;border-radius:10px;flex-shrink:0;
+            ">${t.rating}/5</span>
+          </div>
+          <p style="margin:0;font-size:9px;color:#374151;line-height:1.6;font-style:italic">
+            &ldquo;${t.mesej}&rdquo;
+          </p>
+        </div>`;
+    })
+    .join("");
+
+  const html = `
+    <div style="
+      font-family:'Segoe UI',Arial,sans-serif;
+      background:#fff;
+      width:210mm;
+      margin:0 auto;
+      color:#111827;
+    ">
+      <!-- HEADER -->
+      <div style="
+        background:linear-gradient(135deg,#1E3A8A 0%,#1D4ED8 60%,#2563EB 100%);
+        color:#fff;
+        padding:22px 28px 18px;
+      ">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between">
+          <div>
+            <p style="margin:0 0 4px;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;opacity:0.75;font-weight:600">
+              FISHA Innovation Hub · Jemaah Nazir, KPM
+            </p>
+            <h1 style="margin:0 0 4px;font-size:22px;font-weight:800;letter-spacing:-0.4px;line-height:1.2">
+              Laporan Maklum Balas
+            </h1>
+            <p style="margin:0;font-size:11px;opacity:0.82;font-weight:500">
+              Pengesahan Rakan Sejawat &amp; Maklum Balas Pengguna
+            </p>
+          </div>
+          <div style="text-align:right;opacity:0.8">
+            <p style="margin:0;font-size:8.5px">Dijana pada</p>
+            <p style="margin:2px 0 0;font-size:9px;font-weight:700">${generatedDate}</p>
+          </div>
+        </div>
+
+        <!-- Stats row -->
+        <div style="display:flex;gap:10px;margin-top:16px">
+          ${[
+            { value: items.length.toString(), label: "Jumlah Responden" },
+            { value: avgRating + " ★", label: "Purata Rating" },
+            { value: fiveStars.toString(), label: "Rating Sempurna (5★)" },
+          ].map(s => `
+            <div style="
+              background:rgba(255,255,255,0.13);
+              border:1px solid rgba(255,255,255,0.22);
+              border-radius:8px;
+              padding:9px 16px;
+              text-align:center;
+              min-width:80px;
+            ">
+              <p style="margin:0;font-size:18px;font-weight:800;line-height:1">${s.value}</p>
+              <p style="margin:4px 0 0;font-size:7.5px;opacity:0.8;line-height:1.3">${s.label}</p>
+            </div>`).join("")}
+        </div>
+      </div>
+
+      <!-- DIVIDER LABEL -->
+      <div style="background:#F0F7FF;border-bottom:1px solid #DBEAFE;padding:7px 28px">
+        <p style="margin:0;font-size:7.5px;font-weight:700;color:#3B82F6;letter-spacing:0.12em;text-transform:uppercase">
+          ── Semua Maklum Balas Pengguna ──────────────────────────────────────────────────────────────
+        </p>
+      </div>
+
+      <!-- CARDS GRID -->
+      <div style="padding:16px 28px 8px;columns:2;column-gap:14px">
+        ${cards}
+      </div>
+
+      <!-- FOOTER -->
+      <div style="
+        background:#F0F4FF;
+        border-top:1px solid #DBEAFE;
+        padding:8px 28px;
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+      ">
+        <p style="margin:0;font-size:7.5px;color:#6B7280">
+          Laporan ini dijana secara automatik daripada portal FISHA Innovation Hub
+        </p>
+        <p style="margin:0;font-size:7.5px;color:#6B7280">inovasi-sistem-fisha.vercel.app</p>
+      </div>
+    </div>`;
+
+  // Mount off-screen
+  const container = document.createElement("div");
+  container.style.cssText = "position:fixed;left:-9999px;top:0;z-index:-1;background:#fff";
+  container.innerHTML = html;
+  document.body.appendChild(container);
+
+  try {
+    await document.fonts.ready;
+    await new Promise((r) => setTimeout(r, 300));
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const html2pdf = (await import("html2pdf.js") as any).default;
+    await html2pdf()
+      .set({
+        margin: [10, 0, 10, 0],
+        filename: `MaklumBalas-FISHAHub-${new Date().toISOString().slice(0, 10)}.pdf`,
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true, logging: false, backgroundColor: "#ffffff" },
+        jsPDF: { unit: "mm", format: "a4", orientation: "portrait", compress: true },
+        pagebreak: { mode: ["css", "legacy"] },
+      })
+      .from(container.firstElementChild)
+      .save();
+  } finally {
+    document.body.removeChild(container);
+  }
+}
+
 /* ── All Testimonials Modal ── */
 function AllTestimonialsModal({ onClose }: { onClose: () => void }) {
   const [allItems, setAllItems] = useState<Testimonial[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const [pdfLoading, setPdfLoading] = useState(false);
+
+  const handleExportPDF = async () => {
+    if (pdfLoading || allItems.length === 0) return;
+    setPdfLoading(true);
+    try {
+      await exportTestimonialsPDF(allItems);
+    } catch (err) {
+      console.error("PDF export failed:", err);
+    } finally {
+      setPdfLoading(false);
+    }
+  };
 
   useEffect(() => {
     fetch("/api/testimonial/all")
@@ -84,12 +266,27 @@ function AllTestimonialsModal({ onClose }: { onClose: () => void }) {
             </h3>
             <p className="text-xs text-slate-500 mt-0.5">{allItems.length} rekod dijumpai</p>
           </div>
-          <button
-            onClick={onClose}
-            className="w-8 h-8 rounded-full flex items-center justify-center text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors"
-          >
-            ✕
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleExportPDF}
+              disabled={pdfLoading || loading || allItems.length === 0}
+              className="inline-flex items-center gap-1.5 text-xs py-1.5 px-3 rounded-lg font-semibold transition-all duration-150 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
+              style={{ background: "#1D4ED8", color: "#fff", border: "none" }}
+            >
+              {pdfLoading ? (
+                <Loader2 size={12} className="animate-spin" />
+              ) : (
+                <FileDown size={12} />
+              )}
+              {pdfLoading ? "Menjana…" : "Eksport PDF"}
+            </button>
+            <button
+              onClick={onClose}
+              className="w-8 h-8 rounded-full flex items-center justify-center text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors"
+            >
+              ✕
+            </button>
+          </div>
         </div>
 
         {/* Search bar */}
