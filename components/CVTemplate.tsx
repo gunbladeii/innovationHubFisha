@@ -1,3 +1,4 @@
+import { QRCodeSVG } from "qrcode.react";
 import {
   INOVASI_SEED,
   SKILL_GROUPS,
@@ -242,7 +243,7 @@ export default function CVTemplate({
           </div>
 
           {/* Pencapaian Utama */}
-          <div style={{ breakInside: "avoid" }}>
+          <div style={{ marginBottom: 10, breakInside: "avoid" }}>
             <h2 style={cvSectionTitle}>Pencapaian Utama</h2>
             <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
               {CV_PENCAPAIAN.map((p, i) => (
@@ -251,6 +252,70 @@ export default function CVTemplate({
                   <p style={{ fontSize: 8, color: "#374151", lineHeight: 1.5, margin: 0 }}>{p}</p>
                 </div>
               ))}
+            </div>
+          </div>
+
+          {/* QR Code — Portfolio Digital */}
+          <div
+            style={{
+              breakInside: "avoid",
+              padding: "8px",
+              borderRadius: 6,
+              border: "1.5px solid #BFDBFE",
+              background: "linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%)",
+              textAlign: "center",
+            }}
+          >
+            <p
+              style={{
+                fontSize: 7,
+                fontWeight: 800,
+                color: "#1D4ED8",
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                margin: "0 0 6px",
+              }}
+            >
+              🔗 Portfolio Digital
+            </p>
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <div
+                style={{
+                  background: "white",
+                  borderRadius: 4,
+                  padding: 3,
+                  border: "1px solid #BFDBFE",
+                  flexShrink: 0,
+                }}
+              >
+                <QRCodeSVG
+                  value="https://inovasi-sistem-fisha.vercel.app/"
+                  size={58}
+                  bgColor="#ffffff"
+                  fgColor="#1E3A8A"
+                  level="M"
+                />
+              </div>
+              <div style={{ textAlign: "left", flex: 1, minWidth: 0 }}>
+                <p style={{ fontSize: 7.5, fontWeight: 700, color: "#1D4ED8", margin: "0 0 2px", lineHeight: 1.3 }}>
+                  Imbas untuk lihat
+                </p>
+                <p style={{ fontSize: 8, fontWeight: 800, color: "#111827", margin: "0 0 4px", lineHeight: 1.3 }}>
+                  Hasil Inovasi Digital
+                </p>
+                <p
+                  style={{
+                    fontSize: 6.5,
+                    color: "#6B7280",
+                    margin: 0,
+                    wordBreak: "break-all",
+                    fontStyle: "italic",
+                    lineHeight: 1.4,
+                  }}
+                >
+                  inovasi-sistem-fisha.vercel.app
+                </p>
+              </div>
             </div>
           </div>
         </div>
